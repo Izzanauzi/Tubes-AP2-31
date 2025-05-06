@@ -1,0 +1,38 @@
+Aplikasi AI Stylist dan Manajemen Pakaian Digital
+
+Deskripsi:
+Aplikasi ini membantu pengguna dalam mengatur pakaian mereka secara digital dan mendapatkan rekomendasi outfit dari AI berdasarkan tren, cuaca, atau acara tertentu.
+
+Spesifikasi:
+a. Pengguna dapat menambahkan, mengubah, dan menghapus daftar pakaian yang dimiliki.
+b. Sistem memberikan rekomendasi outfit harian berdasarkan preferensi pengguna dan cuaca.
+c. Pengguna dapat mencari pakaian berdasarkan warna atau kategori menggunakan Sequential dan Binary Search.
+d. Pengguna dapat mengurutkan daftar pakaian berdasarkan tingkat formalitas atau terakhir kali digunakan menggunakan Selection dan Insertion Sort.
+e. Sistem menampilkan rekomendasi kombinasi pakaian terbaik untuk berbagai kesempatan.
+
+Logic:
+1. Daftar Pakaian
+    Array dengan tipe data buatan pakaian
+    Tipe data buatan pakaian memiliki atribut Id(int), nama(string), warna(string), formalitas(int), kategori(string)
+        Formalitas memiliki 3 level: 1 santai, 2 semi formal, 3 formal
+        Kategori memiliki 5 bagian: atasan, bawahan, luaran, alas kaki, aksesori
+    Memiliki fitur add, edit, delete
+    Memiliki fitur search dan sort
+2. Rekomendasi Pakaian
+    Menerima masukan berupa cuaca, acara, dan tren
+    Memberikan rekomendasi sebanyak kategori atasan, bawahan, luaran(can null), alas kaki, aksesoris(can null) yang sesuai dengan kondisi masukan user
+    Rekomendasi yang diberikan diurutkan berdasarkan tren
+    Maksimal memberikan 3 rekomendasi
+    User akan memilih 1 dari setiap kategori, kemudian pilihan user akan dimasukan ke riwayat
+3. Tren
+    Tren adalah yang paling sering dipakai dalam interval waktu tertentu
+    #1 Tren berdasarkan riwayat, riwayat adalah array dengan tipe data buatan dengan atribut Id(int), waktu(int)
+        Id mencatat Id dari pakaian
+        Waktu akan bertambah setiap ada masukan baru
+        Keungulan: semua pilihan user akan terekam
+    #2 Tren berdasarkan riwayat, riwayat adalah array dengan nilai array maksimal 7 dengan atribut Id(Int)
+        Id mencatat Id dari pakaian
+        Ketika user memilih pakaian dari rekomendasi maka akan ada array baru, maka data dari array akan dipindahkan +1 ex. Riwayat[2] <-- Riwayat[1], sehingga program hanya akan mencatat sebuah tren selama 7 kali pemakaian func rekomendasi
+        Keungulan: lebih simple(sepertinya), hemat penyimapanan
+
+#Logic dapat berubah dikemudian hari
