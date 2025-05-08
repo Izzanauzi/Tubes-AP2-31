@@ -66,7 +66,19 @@ Func add
                 SP: Celana pendek
                 SD: Sendal
                 SH: Sepatu
-            EX. Seragam Merah Telkom Univ, Merah, Kemeja lengan panjang, Formal = SMLS3
+            EX. Seragam Merah Telkom Univ, Merah, Kemeja lengan panjang, Formal = SMLS3001
+            opsi lain gunakan kode dan nomor urut
+                01: Kemeja lengan panjang
+                02: Kemeja lengan pendek
+                03: Kaos lengan panjang
+                04: Kaos lengan pendek
+                05: Celana panjang
+                06: Celana pendek
+                07: Jaket
+                08: Luaran
+                09: Sendal
+                10: Sepatu
+            EX. Seragam Merah Telkom Univ, Merah, Kemeja lengan panjang, Formal = Formal + Kategori + No Urut = 301001
     #2 Id diisi manual
 Func edit
     Mengambil 1 data array pakaian dari daftar pakaian untuk di edit
