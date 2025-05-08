@@ -15,7 +15,7 @@ Logic:
     Array dengan tipe data buatan pakaian
     Tipe data buatan pakaian memiliki atribut Id(int), nama(string), warna(string), formalitas(int), kategori(string)
         Formalitas memiliki 3 level: 1 santai, 2 semi formal, 3 formal
-        Kategori memiliki 5 bagian: atasan, bawahan, luaran, alas kaki, aksesori
+        Kategori memiliki 10 bagian: Kemeja lengan pendek, kemeja lengan panjang, kaos lengan pendek, kaos lengan panjang, celana pendek, celana panjang, jaket, kemeja luaran, sendal, sepatu
     Memiliki fitur add, edit, delete
     Memiliki fitur search dan sort
 2. Rekomendasi Pakaian
@@ -35,4 +35,58 @@ Logic:
         Ketika user memilih pakaian dari rekomendasi maka akan ada array baru, maka data dari array akan dipindahkan +1 ex. Riwayat[2] <-- Riwayat[1], sehingga program hanya akan mencatat sebuah tren selama 7 kali pemakaian func rekomendasi
         Keungulan: lebih simple(sepertinya), hemat penyimapanan
 
+Func Menu
+    Tampilan awal aplikasi
+    Menampilan sambutan
+    Pilihan menu menggunakan angka
+        1: Daftar Pakaian
+        2: Rekomendasi hari ini
+Func Daftar Pakaian
+    Menampilan daftar pakaian dari data array pakaian
+    Menmpilkan menu untuk add, edit, delete, search, sort
+    Pilihan menu menggunakan angka
+        1: Add
+        2: Edit
+        3: Delete
+        4: Search
+        5. Sort
+        0: Back
+Func add
+    Menambahkan data pakaian pada daftar pakaian
+    #1 Id di generate otomatis
+        Menggunakan ASCII sebagai acuan Id
+            1: Karakter pertama dari nama pakaian
+            2: Karakter pertama dari warna pakaian
+            3: Kode kategori
+                LS: Kemeja lengan panjang
+                SS: Kemeja lengan pendek
+                LT: Kaos lengan panjang
+                ST: Kaos lengan pendek
+                LP: Celana panjang
+                SP: Celana pendek
+                SD: Sendal
+                SH: Sepatu
+            EX. Seragam Merah Telkom Univ, Merah, Kemeja lengan panjang, Formal = SMLS3
+    #2 Id diisi manual
+Func edit
+    Mengambil 1 data array pakaian dari daftar pakaian untuk di edit
+Func delete
+    Menghapus 1 data array pakaian di daftar pakaian
+Func PrintDaftar
+    Menampilan semua daftar pakaian
+    Menggunakan looping untuk menampilkan semua data array pakaian
+Func Search
+    Menampilkan data array sesuai kata kunci
+    Kata kunci dapat berupa
+        1: Id
+        2: Nama
+        3: Warna
+        4: 
+Func Sort
+    Menampilkan data array yang sudah di sortir
+    Sortir dapat berdasarkan
+        1: Formalitas
+        2: Tren
+
+#Kamis 8 Mei 2025 Menyelesaikan Logic dan Fitur Daftar Pakaian
 #Logic dapat berubah dikemudian hari
