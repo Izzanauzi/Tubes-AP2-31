@@ -10,8 +10,6 @@ type AtributePakaian struct {
 }
 type DaftarPakaian [nmax]AtributePakaian
 
-var pilih int
-
 // type Riwayat struct {
 // 	Id   string
 // 	Used int
@@ -103,13 +101,12 @@ func WriteData(Pakaian DaftarPakaian, i int) {
 	}
 }
 
-func add(Pakaian *DaftarPakaian, n *int) {
+func add(Pakaian *DaftarPakaian, n int) {
 	//Fitur Tambah Pakaian
 	/*
 		Menambahkan data pakaian kedalam array dengan ketentuan yang sudah diatur
 		Generate Pakaian.Id secara otomatis
 	*/
-	*n++
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-14s%-26s |", " ", "NAMA PAKAIAN")
 	fmt.Printf("\n+------------------------------------------+")
@@ -118,7 +115,7 @@ func add(Pakaian *DaftarPakaian, n *int) {
 	fmt.Printf("\n| %-40s |", "EX. Kemeja_Teknik")
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-10s%-2s ", "Nama", ":")
-	fmt.Scan(&Pakaian[*n].Nama)
+	fmt.Scan(&Pakaian[n].Nama)
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-13s%-27s |", " ", "WARNA PAKAIAN")
 	fmt.Printf("\n+------------------------------------------+")
@@ -126,7 +123,7 @@ func add(Pakaian *DaftarPakaian, n *int) {
 	fmt.Printf("\n| %-40s |", "EX. Merah")
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-10s%-2s ", "Warna", ":")
-	fmt.Scan(&Pakaian[*n].Warna)
+	fmt.Scan(&Pakaian[n].Warna)
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-12s%-28s |", " ", "KATEGORI PAKAIAN")
 	fmt.Printf("\n+------------------------------------------+")
@@ -146,7 +143,7 @@ func add(Pakaian *DaftarPakaian, n *int) {
 	fmt.Printf("\n| %-40s |", "10 : Sepatu")
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-10s%-2s ", "Kategori", ":")
-	fmt.Scan(&Pakaian[*n].Kategori)
+	fmt.Scan(&Pakaian[n].Kategori)
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-11s%-29s |", " ", "TINGKAT FORMALITAS")
 	fmt.Printf("\n+------------------------------------------+")
@@ -159,16 +156,27 @@ func add(Pakaian *DaftarPakaian, n *int) {
 	fmt.Printf("\n| %-40s |", "3 : Formal")
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-10s%-2s ", "Formalitas", ":")
-	fmt.Scan(&Pakaian[*n].Formalitas)
-	Pakaian[*n].Id = (Pakaian[*n].Formalitas * 100000) + (Pakaian[*n].Kategori * 1000) + (*n + 1)
+	fmt.Scan(&Pakaian[n].Formalitas)
+	Pakaian[n].Id = (Pakaian[n].Formalitas * 100000) + (Pakaian[n].Kategori * 1000) + (n + 1)
 }
 
-// func min(Pakaian DaftarPakaian, n int) int{
+func min(Pakaian DaftarPakaian, n, i int) int {
+	//masih salah
+	var min = Pakaian[i].Id % 100
+	for j := i + 1; j < n; j++ {
+		if Pakaian[i].Id%100 > Pakaian[j].Id%100 {
+			min = Pakaian[j].Id % 100
+		}
+	}
+	return min
+}
 
-// }
+// func SortById(Pakaian *DaftarPakaian, n *int) {
+// 	var temp [1]DaftarPakaian
+// 	for i := 0; i < n; i++ {
+// 		temp[i] = Pakaian[min(Pakaian, *n, i)]
 
-// func SortById(){
-
+// 	}
 // }
 
 func SearchById(Pakaian DaftarPakaian, n int, key int) int {
@@ -177,7 +185,7 @@ func SearchById(Pakaian DaftarPakaian, n int, key int) int {
 	left = 0
 	right = n
 	for left <= right {
-		mid = left + right/2
+		mid = (left + right) / 2
 		if Pakaian[mid].Id%100 == key%100 {
 			return mid
 		} else if Pakaian[mid].Id%100 < key%100 {
@@ -189,22 +197,27 @@ func SearchById(Pakaian DaftarPakaian, n int, key int) int {
 	return -1
 }
 
-// func edit(A *TabPakaian, n *int) {
-// 	fmt.Println("Edit list Pakaian")
-// 	// list digunakan untuk memanggil list yang akan di edit
-// 	fmt.Print("\nEdit Nama\t: ")
-// 	fmt.Scan(&A[*n].Nama)
-// 	fmt.Print("\nEdit Warna\t: ")
-// 	fmt.Scan(&A[*n].Warna)
-// 	fmt.Print("\nEdit Kategori\t: ")
-// 	fmt.Scan(&A[*n].Kategori)
-// 	fmt.Print("\nEdit Level Formalitas\n\t \nFormalitas\t: ")
-// 	fmt.Scan(&A[*n].Formalitas)
-// }
+func edit(Pakaian *DaftarPakaian, n *int, Key int) {
+	var ganti int = SearchById(*Pakaian, *n, Key)
+	if ganti > -1 {
+		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
+		fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Data Sebelumnya", " ")
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-12s |", "Id", "Nama Pakaian", "Warna", "Kategori", "Formalitas")
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		WriteData(*Pakaian, ganti)
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		add(Pakaian, ganti)
+	} else {
+		fmt.Printf("Data tidak ditemukan")
+	}
+}
 
 func main() {
 	var Pakaian DaftarPakaian
 	var nPakaian int = -1
+	var KeyId int
+	var pilih int
 	for valid := false; !valid; {
 		welcome()
 		fmt.Scan(&pilih)
@@ -215,9 +228,12 @@ func main() {
 				fmt.Scan(&pilih)
 				switch pilih {
 				case 1:
-					add(&Pakaian, &nPakaian)
-				// case 2:
-				// 	edit()
+					nPakaian++
+					add(&Pakaian, nPakaian)
+				case 2:
+					fmt.Printf("Masukan Id data yang ingin di edit: ")
+					fmt.Scan(&KeyId)
+					edit(&Pakaian, &nPakaian, KeyId)
 				// case 3:
 				// 	delete()
 				// case 4:
