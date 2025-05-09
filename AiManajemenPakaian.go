@@ -38,21 +38,21 @@ func welcome() {
 
 func MenuDaftarPakaian(Pakaian DaftarPakaian, n int) {
 	//Tampilan Menu Daftar Pakaian
-	fmt.Printf("\n+----------------------------------------------------------------------------------------------------+")
-	fmt.Printf("\n| %-42s%-14s%-42s |", " ", "Daftar Pakaian", " ")
+	fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
+	fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Daftar Pakaian", " ")
 	if n == -1 { //Jika array blm diisi, maka akan mengeluarkan informasi bahwa data kosong
-		fmt.Printf("\n+----------------------------------------------------------------------------------------------------+")
-		fmt.Printf("\n| %-39s%-20s%-39s |", " ", "Data Pakaian Kosong!", " ")
-		fmt.Printf("\n| %-35s%-28s%-35s |", " ", "Silahkan Tambah Data Pakaian", " ")
-		fmt.Printf("\n+----------------------------------------------------------------------------------------------------+")
+		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
+		fmt.Printf("\n| %-40s%-20s%-40s |", " ", "Data Pakaian Kosong!", " ")
+		fmt.Printf("\n| %-36s%-28s%-36s |", " ", "Silahkan Tambah Data Pakaian", " ")
+		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 	} else { //Jika array sudah diisi, maka akan menulis semua data array
-		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+------------+")
-		fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-10s |", "Id", "Nama Pakaian", "Warna", "Kategori", "Formalitas")
-		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+------------+")
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-12s |", "Id", "Nama Pakaian", "Warna", "Kategori", "Formalitas")
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 		for i := 0; i <= n; i++ { //Looping untuk menulis semua data array
 			WriteData(Pakaian, i)
 		}
-		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+------------+")
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
 	fmt.Printf("\n\n+------------------------------------------+")
 	fmt.Printf("\n| %-18s%-22s |", " ", "MENU")
@@ -95,15 +95,20 @@ func WriteData(Pakaian DaftarPakaian, i int) {
 	}
 	switch Pakaian[i].Formalitas {
 	case 1:
-		fmt.Printf("| %-10s |", "Santai")
+		fmt.Printf("| %-12s |", "Santai")
 	case 2:
-		fmt.Printf("| %-10s |", "Semi Formal")
+		fmt.Printf("| %-12s |", "Semi Formal")
 	case 3:
-		fmt.Printf("| %-10s |", "Formal")
+		fmt.Printf("| %-12s |", "Formal")
 	}
 }
 
 func add(Pakaian *DaftarPakaian, n *int) {
+	//Fitur Tambah Pakaian
+	/*
+		Menambahkan data pakaian kedalam array dengan ketentuan yang sudah diatur
+		Generate Pakaian.Id secara otomatis
+	*/
 	*n++
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-14s%-26s |", " ", "NAMA PAKAIAN")
@@ -118,9 +123,7 @@ func add(Pakaian *DaftarPakaian, n *int) {
 	fmt.Printf("\n| %-13s%-27s |", " ", "WARNA PAKAIAN")
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-40s |", "#1 Masukan Warna Pakaian")
-	fmt.Printf("\n| %-40s |", "#2 Gunakan \",\" tanpa spasi jika terdapat")
-	fmt.Printf("\n| %-40s |", "   2 warna atau lebih dalam 1 pakaian")
-	fmt.Printf("\n| %-40s |", "EX. Merah,Putih")
+	fmt.Printf("\n| %-40s |", "EX. Merah")
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-10s%-2s ", "Warna", ":")
 	fmt.Scan(&Pakaian[*n].Warna)
@@ -158,6 +161,32 @@ func add(Pakaian *DaftarPakaian, n *int) {
 	fmt.Printf("\n| %-10s%-2s ", "Formalitas", ":")
 	fmt.Scan(&Pakaian[*n].Formalitas)
 	Pakaian[*n].Id = (Pakaian[*n].Formalitas * 100000) + (Pakaian[*n].Kategori * 1000) + (*n + 1)
+}
+
+// func min(Pakaian DaftarPakaian, n int) int{
+
+// }
+
+// func SortById(){
+
+// }
+
+func SearchById(Pakaian DaftarPakaian, n int, key int) int {
+	//Pencarian Id menggunakan binary search
+	var left, mid, right int
+	left = 0
+	right = n
+	for left <= right {
+		mid = left + right/2
+		if Pakaian[mid].Id%100 == key%100 {
+			return mid
+		} else if Pakaian[mid].Id%100 < key%100 {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+	return -1
 }
 
 // func edit(A *TabPakaian, n *int) {
