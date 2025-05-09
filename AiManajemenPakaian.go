@@ -27,22 +27,6 @@ var pilih int
 // }
 // type TabRiwayat Riwayat
 
-func main() {
-	var Pakaian DaftarPakaian
-	var nPakaian int = -1
-	for valid := false; !valid; {
-		welcome()
-		fmt.Scan(&pilih)
-		switch pilih {
-		case 1:
-			MenuDaftarPakaian(&Pakaian, &nPakaian)
-		// case 2:
-		case 0:
-			valid = true
-		}
-	}
-}
-
 func welcome() {
 	//Tampilan Pertama Ketika Memulai Program
 	fmt.Printf("\n+------------------------------------------+")
@@ -60,9 +44,9 @@ func welcome() {
 	fmt.Printf("\nPilih (1/2/0)?")
 }
 
-func MenuDaftarPakaian(Pakaian *DaftarPakaian, n *int) {
-
-	if *n == -1 {
+func MenuDaftarPakaian(Pakaian DaftarPakaian, n int) {
+	//Tampilan Menu Daftar Pakaian
+	if n == -1 {
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-10s%-20s%-10s |", " ", "Data Pakaian Kosong", " ")
 		fmt.Printf("\n+------------------------------------------+")
@@ -70,10 +54,9 @@ func MenuDaftarPakaian(Pakaian *DaftarPakaian, n *int) {
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+------------+")
 		fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-10s |", "Id", "Nama Pakaian", "Warna", "Kategori", "Formalitas")
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+------------+")
-		for i := 0; i < *n; i++ {
-			fmt.Println(i)
-			fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-10s |", Pakaian[i].Id, Pakaian[i].Nama, Pakaian[i].Warna, Pakaian[i].Kategori, Pakaian[i].Formalitas)
-			//MASIH ERROR
+		for i := 0; i <= n; i++ {
+			//Write Data Array Pakaian
+			fmt.Printf("\n| %-6d | %-30s | %-15s | %-25d | %-10d |", Pakaian[i].Id, Pakaian[i].Nama, Pakaian[i].Warna, Pakaian[i].Kategori, Pakaian[i].Formalitas)
 		}
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+------------+")
 	}
@@ -88,20 +71,7 @@ func MenuDaftarPakaian(Pakaian *DaftarPakaian, n *int) {
 	fmt.Printf("\n| %-40s |", "[0] Home")
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\nPilih (1/2/3/4/5/6/0)?")
-	fmt.Scan(&pilih)
-	switch pilih {
-	case 1:
-		add(Pakaian, n)
-	// case 2:
-	// 	edit()
-	// case 3:
-	// 	delete()
-	// case 4:
-	// 	search()
-	// case 5:
-	// 	sort()
-	case 0:
-	}
+
 }
 
 func add(Pakaian *DaftarPakaian, n *int) {
@@ -140,7 +110,7 @@ func add(Pakaian *DaftarPakaian, n *int) {
 	fmt.Printf("\n| %-10s%-2s ", "Formalitas", ":")
 	fmt.Scan(&Pakaian[*n].Formalitas)
 	fmt.Printf("\n+------------------------------------------+")
-	Pakaian[*n].Id = Pakaian[*n].Formalitas*100000 + Pakaian[*n].Kategori*1000 + *n
+	Pakaian[*n].Id = (Pakaian[*n].Formalitas * 100000) + (Pakaian[*n].Kategori * 1000) + (*n + 1)
 }
 
 // func edit(A *TabPakaian, n *int) {
@@ -155,3 +125,33 @@ func add(Pakaian *DaftarPakaian, n *int) {
 // 	fmt.Print("\nEdit Level Formalitas\n\t \nFormalitas\t: ")
 // 	fmt.Scan(&A[*n].Formalitas)
 // }
+
+func main() {
+	var Pakaian DaftarPakaian
+	var nPakaian int = -1
+	for valid := false; !valid; {
+		welcome()
+		fmt.Scan(&pilih)
+		switch pilih {
+		case 1:
+			MenuDaftarPakaian(Pakaian, nPakaian)
+			fmt.Scan(&pilih)
+			switch pilih {
+			case 1:
+				add(&Pakaian, &nPakaian)
+			// case 2:
+			// 	edit()
+			// case 3:
+			// 	delete()
+			// case 4:
+			// 	search()
+			// case 5:
+			// 	sort()
+			case 0:
+			}
+		// case 2:
+		case 0:
+			valid = true
+		}
+	}
+}
