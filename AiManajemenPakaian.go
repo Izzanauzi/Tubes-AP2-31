@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 const nmax int = 1024
 
@@ -161,23 +163,27 @@ func add(Pakaian *DaftarPakaian, n int) {
 }
 
 func min(Pakaian DaftarPakaian, n, i int) int {
-	//masih salah
-	var min = Pakaian[i].Id % 100
+	//Mencari nilai minimum dalam rentang tertentu
+	var min = i
 	for j := i + 1; j < n; j++ {
 		if Pakaian[i].Id%100 > Pakaian[j].Id%100 {
-			min = Pakaian[j].Id % 100
+			min = j
 		}
 	}
 	return min
 }
 
-// func SortById(Pakaian *DaftarPakaian, n *int) {
-// 	var temp [1]DaftarPakaian
-// 	for i := 0; i < n; i++ {
-// 		temp[i] = Pakaian[min(Pakaian, *n, i)]
-
-// 	}
-// }
+func SortById(Pakaian *DaftarPakaian, n int) {
+	//Mengurutkan Index array berdasarkan Id
+	var temp AtributePakaian
+	var minIdx int
+	for i := 0; i < n; i++ {
+		minIdx = min(*Pakaian, n, i)
+		temp = (*Pakaian)[i]
+		(*Pakaian)[i] = (*Pakaian)[minIdx]
+		(*Pakaian)[minIdx] = temp
+	}
+}
 
 func SearchById(Pakaian DaftarPakaian, n int, key int) int {
 	//Pencarian Id menggunakan binary search
@@ -198,6 +204,11 @@ func SearchById(Pakaian DaftarPakaian, n int, key int) int {
 }
 
 func edit(Pakaian *DaftarPakaian, n *int, Key int) {
+	//Fitur edit
+	/*
+		Data yang diedit dicari berdasarkan 2 angka Id paling akhir
+		Menampilkan data sebelum diedit
+	*/
 	var ganti int = SearchById(*Pakaian, *n, Key)
 	if ganti > -1 {
 		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
@@ -233,6 +244,7 @@ func main() {
 				case 2:
 					fmt.Printf("Masukan Id data yang ingin di edit: ")
 					fmt.Scan(&KeyId)
+					SortById(&Pakaian, nPakaian) //Melakukan selection sort by Id karena akan menggunakan binary search untuk mencari Id
 					edit(&Pakaian, &nPakaian, KeyId)
 				// case 3:
 				// 	delete()
