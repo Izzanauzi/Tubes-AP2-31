@@ -9,15 +9,17 @@ const nmax int = 1024
 type AtributePakaian struct {
 	Id, Formalitas, Kategori, list int
 	Nama, Warna                    string
-	Aktif 						   bool // ini untuk soft delete true = aktif dan false = softdelete
+	Aktif                          bool // ini untuk soft delete true = aktif dan false = softdelete
 }
 type DaftarPakaian [nmax]AtributePakaian
 
-// type Riwayat struct {
-// 	Id   string
-// 	Used int
-// }
+//	type Riwayat struct {
+//		Id   string
+//		Used int
+//	}
+//
 // type TabRiwayat Riwayat
+var NextId int
 
 func welcome() {
 	//Tampilan Pertama Ketika Memulai Program
@@ -69,45 +71,44 @@ func MenuDaftarPakaian(Pakaian DaftarPakaian, n int) {
 }
 
 func WriteData(Pakaian DaftarPakaian, i int) {
-	if !Pakaian[i].Aktif { // buat cek ii aktif atau kagak
-		return
-	}
-	fmt.Printf("\n| %-6d ", Pakaian[i].Id)
-	fmt.Printf("| %-30s ", Pakaian[i].Nama)
-	fmt.Printf("| %-15s ", Pakaian[i].Warna)
-	switch Pakaian[i].Kategori {
-	case 1:
-		fmt.Printf("| %-25s ", "Kemeja Lengan Panjang")
-	case 2:
-		fmt.Printf("| %-25s ", "Kemeja Lengan Pendek")
-	case 3:
-		fmt.Printf("| %-25s ", "Kaos Lengan Panjang")
-	case 4:
-		fmt.Printf("| %-25s ", "Kaos Lengan Pendek")
-	case 5:
-		fmt.Printf("| %-25s ", "Celana Panjang")
-	case 6:
-		fmt.Printf("| %-25s ", "Celana Pendek")
-	case 7:
-		fmt.Printf("| %-25s ", "Jaket")
-	case 8:
-		fmt.Printf("| %-25s ", "Luaran")
-	case 9:
-		fmt.Printf("| %-25s ", "Sendal")
-	case 10:
-		fmt.Printf("| %-25s ", "Sepatu")
-	}
-	switch Pakaian[i].Formalitas {
-	case 1:
-		fmt.Printf("| %-12s |", "Santai")
-	case 2:
-		fmt.Printf("| %-12s |", "Semi Formal")
-	case 3:
-		fmt.Printf("| %-12s |", "Formal")
+	if Pakaian[i].Aktif { // buat cek ii aktif atau kagak
+		fmt.Printf("\n| %-6d ", Pakaian[i].Id)
+		fmt.Printf("| %-30s ", Pakaian[i].Nama)
+		fmt.Printf("| %-15s ", Pakaian[i].Warna)
+		switch Pakaian[i].Kategori {
+		case 1:
+			fmt.Printf("| %-25s ", "Kemeja Lengan Panjang")
+		case 2:
+			fmt.Printf("| %-25s ", "Kemeja Lengan Pendek")
+		case 3:
+			fmt.Printf("| %-25s ", "Kaos Lengan Panjang")
+		case 4:
+			fmt.Printf("| %-25s ", "Kaos Lengan Pendek")
+		case 5:
+			fmt.Printf("| %-25s ", "Celana Panjang")
+		case 6:
+			fmt.Printf("| %-25s ", "Celana Pendek")
+		case 7:
+			fmt.Printf("| %-25s ", "Jaket")
+		case 8:
+			fmt.Printf("| %-25s ", "Luaran")
+		case 9:
+			fmt.Printf("| %-25s ", "Sendal")
+		case 10:
+			fmt.Printf("| %-25s ", "Sepatu")
+		}
+		switch Pakaian[i].Formalitas {
+		case 1:
+			fmt.Printf("| %-12s |", "Santai")
+		case 2:
+			fmt.Printf("| %-12s |", "Semi Formal")
+		case 3:
+			fmt.Printf("| %-12s |", "Formal")
+		}
 	}
 }
 
-func add(Pakaian *DaftarPakaian, n int) {
+func add(Pakaian *DaftarPakaian, n int, IsEdit bool) {
 	//Fitur Tambah Pakaian
 	/*
 		Menambahkan data pakaian kedalam array dengan ketentuan yang sudah diatur
@@ -163,8 +164,11 @@ func add(Pakaian *DaftarPakaian, n int) {
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-10s%-2s ", "Formalitas", ":")
 	fmt.Scan(&Pakaian[n].Formalitas)
-	Pakaian[n].Id = (Pakaian[n].Formalitas * 100000) + (Pakaian[n].Kategori * 1000) + (n + 1)
+	if !IsEdit {
+		Pakaian[n].Id = NextId + 1
+	}
 	Pakaian[n].Aktif = true
+	NextId++
 }
 
 func min(Pakaian DaftarPakaian, n, i int) int {
@@ -223,7 +227,7 @@ func edit(Pakaian *DaftarPakaian, n *int, Key int) {
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 		WriteData(*Pakaian, ganti)
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
-		add(Pakaian, ganti)
+		add(Pakaian, ganti, true)
 	} else {
 		fmt.Printf("Data tidak ditemukan")
 	}
@@ -259,7 +263,7 @@ func main() {
 				switch pilih {
 				case 1:
 					nPakaian++
-					add(&Pakaian, nPakaian)
+					add(&Pakaian, nPakaian, false)
 				case 2:
 					fmt.Printf("Masukan Id data yang ingin di edit: ")
 					fmt.Scan(&KeyId)
@@ -270,11 +274,11 @@ func main() {
 					fmt.Scan(&KeyId)
 					SortById(&Pakaian, nPakaian)
 					idx := SearchById(Pakaian, nPakaian, KeyId)
-					if idx != -1 && Pakaian[idx].Aktif {
+					if idx > -1 && Pakaian[idx].Aktif {
 						Pakaian[idx].Aktif = false
 						fmt.Println("Data berhasil di delete (soft delete)")
 					} else {
-						fmt.Println("Data tidak ditemukan / sudah tidak aktif")// sejauh ini sudah bisa didelete, gua push dulu ada acara gua mya >-<
+						fmt.Println("Data tidak ditemukan / sudah tidak aktif") // sejauh ini sudah bisa didelete, gua push dulu ada acara gua mya >-<
 					}
 				// case 4:
 				// 	search()
