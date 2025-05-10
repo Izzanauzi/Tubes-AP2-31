@@ -9,6 +9,7 @@ const nmax int = 1024
 type AtributePakaian struct {
 	Id, Formalitas, Kategori, list int
 	Nama, Warna                    string
+	Aktif 						   bool // ini untuk soft delete true = aktif dan false = softdelete
 }
 type DaftarPakaian [nmax]AtributePakaian
 
@@ -68,6 +69,9 @@ func MenuDaftarPakaian(Pakaian DaftarPakaian, n int) {
 }
 
 func WriteData(Pakaian DaftarPakaian, i int) {
+	if !Pakaian[i].Aktif { // buat cek ii aktif atau kagak
+		return
+	}
 	fmt.Printf("\n| %-6d ", Pakaian[i].Id)
 	fmt.Printf("| %-30s ", Pakaian[i].Nama)
 	fmt.Printf("| %-15s ", Pakaian[i].Warna)
@@ -160,6 +164,7 @@ func add(Pakaian *DaftarPakaian, n int) {
 	fmt.Printf("\n| %-10s%-2s ", "Formalitas", ":")
 	fmt.Scan(&Pakaian[n].Formalitas)
 	Pakaian[n].Id = (Pakaian[n].Formalitas * 100000) + (Pakaian[n].Kategori * 1000) + (n + 1)
+	Pakaian[n].Aktif = true
 }
 
 func min(Pakaian DaftarPakaian, n, i int) int {
@@ -224,6 +229,20 @@ func edit(Pakaian *DaftarPakaian, n *int, Key int) {
 	}
 }
 
+func softDelete(Pakaian *DaftarPakaian, n int, id int) {
+	idx := SearchById(*Pakaian, n, id)
+	if idx != -1 {
+		if (*Pakaian)[idx].Aktif {
+			(*Pakaian)[idx].Aktif = false
+			fmt.Println("Data berhasil di nonaktifkan")
+		} else {
+			fmt.Println("Data sudah tidak aktif")
+		}
+	} else {
+		fmt.Println("Data Tidak ada")
+	}
+}
+
 func main() {
 	var Pakaian DaftarPakaian
 	var nPakaian int = -1
@@ -246,8 +265,17 @@ func main() {
 					fmt.Scan(&KeyId)
 					SortById(&Pakaian, nPakaian) //Melakukan selection sort by Id karena akan menggunakan binary search untuk mencari Id
 					edit(&Pakaian, &nPakaian, KeyId)
-				// case 3:
-				// 	delete()
+				case 3:
+					fmt.Printf("Masukan Id data yang ingin di hapus(soft delete): ")
+					fmt.Scan(&KeyId)
+					SortById(&Pakaian, nPakaian)
+					idx := SearchById(Pakaian, nPakaian, KeyId)
+					if idx != -1 && Pakaian[idx].Aktif {
+						Pakaian[idx].Aktif = false
+						fmt.Println("Data berhasil di delete (soft delete)")
+					} else {
+						fmt.Println("Data tidak ditemukan / sudah tidak aktif")// sejauh ini sudah bisa didelete, gua push dulu ada acara gua mya >-<
+					}
 				// case 4:
 				// 	search()
 				// case 5:
