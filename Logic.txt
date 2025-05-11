@@ -83,7 +83,7 @@ Func add
 Func edit
     Mengambil 1 data array pakaian dari daftar pakaian untuk di edit
 Func delete
-    Menghapus 1 data array pakaian di daftar pakaian
+    Memberikan status false pada data array
 Func PrintDaftar
     Menampilan semua daftar pakaian
     Menggunakan looping untuk menampilkan semua data array pakaian
