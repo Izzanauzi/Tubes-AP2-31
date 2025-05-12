@@ -6,12 +6,12 @@ import (
 
 const nmax int = 1024
 
-type AtributePakaian struct {
+type DaftarPakaian struct {
 	Id, Formalitas, Kategori, list int
 	Nama, Warna                    string
-	Aktif                          bool // ini untuk soft delete true = aktif dan false = softdelete
+	Aktif                          bool // ini untuk soft delete true = aktif dan false = Softdelete
 }
-type DaftarPakaian [nmax]AtributePakaian
+type TabPakaian [nmax]DaftarPakaian
 
 //	type Riwayat struct {
 //		Id   string
@@ -39,7 +39,7 @@ func welcome() {
 	fmt.Printf("\nPilih (1/2/0)?")
 }
 
-func MenuDaftarPakaian(Pakaian DaftarPakaian, n int) {
+func MenuTabPakaian(Pakaian TabPakaian, n int) {
 	//Tampilan Menu Daftar Pakaian
 	fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 	fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Daftar Pakaian", " ")
@@ -70,7 +70,17 @@ func MenuDaftarPakaian(Pakaian DaftarPakaian, n int) {
 	fmt.Printf("\nPilih (1/2/3/4/5/6/0)?")
 }
 
-func WriteData(Pakaian DaftarPakaian, i int) {
+func ErrorInput() {
+	fmt.Printf("\n ______   _____    _____     ____    _____  ")
+	fmt.Printf("\n|  ____| |  __ \\  |  __ \\   / __ \\  |  __ \\ ")
+	fmt.Printf("\n| |__    | |__) | | |__) | | |  | | | |__) |")
+	fmt.Printf("\n|  __|   |  _  /  |  _  /  | |  | | |  _  / ")
+	fmt.Printf("\n| |____  | | \\ \\  | | \\ \\  | |__| | | | \\ \\ ")
+	fmt.Printf("\n|______| |_|  \\_\\ |_|  \\_\\  \\____/  |_|  \\_\\")
+	fmt.Printf("\n%s", "Masukan Input Yang Sesuai")
+}
+
+func WriteData(Pakaian TabPakaian, i int) {
 	if Pakaian[i].Aktif { // buat cek ii aktif atau kagak
 		fmt.Printf("\n| %-6d ", Pakaian[i].Id)
 		fmt.Printf("| %-30s ", Pakaian[i].Nama)
@@ -108,7 +118,7 @@ func WriteData(Pakaian DaftarPakaian, i int) {
 	}
 }
 
-func add(Pakaian *DaftarPakaian, n int, IsEdit bool) {
+func add(Pakaian *TabPakaian, n int, IsEdit bool) {
 	//Fitur Tambah Pakaian
 	/*
 		Menambahkan data pakaian kedalam array dengan ketentuan yang sudah diatur
@@ -170,8 +180,28 @@ func add(Pakaian *DaftarPakaian, n int, IsEdit bool) {
 	Pakaian[n].Aktif = true
 	NextId++
 }
+func edit(Pakaian *TabPakaian, n *int, Key int) {
+	//Fitur edit
+	/*
+		Data yang diedit dicari berdasarkan 2 angka Id paling akhir
+		Menampilkan data sebelum diedit
+	*/
+	var ganti int = BinarySearch(*Pakaian, *n, Key)
+	if ganti > -1 {
+		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
+		fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Edit Data", " ")
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-12s |", "Id", "Nama Pakaian", "Warna", "Kategori", "Formalitas")
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		WriteData(*Pakaian, ganti)
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		add(Pakaian, ganti, true)
+	} else {
+		fmt.Printf("Data tidak ditemukan")
+	}
+}
 
-func min(Pakaian DaftarPakaian, n, i int) int {
+func min(Pakaian TabPakaian, n, i int) int {
 	//Mencari nilai minimum dalam rentang tertentu
 	var min = i
 	for j := i + 1; j < n; j++ {
@@ -182,9 +212,9 @@ func min(Pakaian DaftarPakaian, n, i int) int {
 	return min
 }
 
-func SortById(Pakaian *DaftarPakaian, n int) {
+func SortById(Pakaian *TabPakaian, n int) {
 	//Mengurutkan Index array berdasarkan Id
-	var temp AtributePakaian
+	var temp DaftarPakaian
 	var minIdx int
 	for i := 0; i < n; i++ {
 		minIdx = min(*Pakaian, n, i)
@@ -194,7 +224,7 @@ func SortById(Pakaian *DaftarPakaian, n int) {
 	}
 }
 
-func BinarySearch(Pakaian DaftarPakaian, n int, key int) int {
+func BinarySearch(Pakaian TabPakaian, n int, key int) int {
 	//Pencarian Id menggunakan binary search
 	var left, mid, right int
 	left = 0
@@ -212,28 +242,11 @@ func BinarySearch(Pakaian DaftarPakaian, n int, key int) int {
 	return -1
 }
 
-func edit(Pakaian *DaftarPakaian, n *int, Key int) {
-	//Fitur edit
-	/*
-		Data yang diedit dicari berdasarkan 2 angka Id paling akhir
-		Menampilkan data sebelum diedit
-	*/
-	var ganti int = BinarySearch(*Pakaian, *n, Key)
-	if ganti > -1 {
-		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
-		fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Data Sebelumnya", " ")
-		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
-		fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-12s |", "Id", "Nama Pakaian", "Warna", "Kategori", "Formalitas")
-		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
-		WriteData(*Pakaian, ganti)
-		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
-		add(Pakaian, ganti, true)
-	} else {
-		fmt.Printf("Data tidak ditemukan")
-	}
-}
+// func SquentialSearch(Pakaian TabPakaian, n int, key int) {
 
-func softDelete(Pakaian *DaftarPakaian, n int, id int) {
+// }
+
+func SoftDelete(Pakaian *TabPakaian, n int, id int) {
 	//Memberikan status false pada array yang berarti data telah di nonaktifkan / dihapus
 	idx := BinarySearch(*Pakaian, n, id)
 	if idx != -1 {
@@ -249,7 +262,7 @@ func softDelete(Pakaian *DaftarPakaian, n int, id int) {
 }
 
 func main() {
-	var Pakaian DaftarPakaian
+	var Pakaian TabPakaian
 	var nPakaian int = -1
 	var Key int
 	var pilih string
@@ -259,7 +272,7 @@ func main() {
 		switch pilih {
 		case "1":
 			for valid1 := false; !valid1; {
-				MenuDaftarPakaian(Pakaian, nPakaian)
+				MenuTabPakaian(Pakaian, nPakaian)
 				fmt.Scan(&pilih)
 				switch pilih {
 				case "1":
@@ -296,38 +309,14 @@ func main() {
 				case "0":
 					valid1 = true
 				default:
-					fmt.Printf("\nERRORERRORERRORERRORERRORERRORERRORERRORERROR")
-					fmt.Printf("\nRRORERROR+-------------------------+RORERRORE")
-					fmt.Printf("\nRORERRORE|          ERROR          |ORERRORER")
-					fmt.Printf("\nORERRORER|MASUKAN INPUT YANG SESUAI|RERRORERR")
-					fmt.Printf("\nRERRORERR+-------------------------+ERRORERRO")
-					fmt.Printf("\nERRORERRORERRORERRORERRORERRORERRORERRORERROR")
-
-					fmt.Printf("\n ______   _____    _____     ____    _____  ")
-					fmt.Printf("\n|  ____| |  __ \\  |  __ \\   / __ \\  |  __ \\ ")
-					fmt.Printf("\n| |__    | |__) | | |__) | | |  | | | |__) |")
-					fmt.Printf("\n|  __|   |  _  /  |  _  /  | |  | | |  _  / ")
-					fmt.Printf("\n| |____  | | \\ \\  | | \\ \\  | |__| | | | \\ \\ ")
-					fmt.Printf("\n|______| |_|  \\_\\ |_|  \\_\\  \\____/  |_|  \\_\\")
+					ErrorInput()
 				}
 			}
 		// case "2":
 		case "0":
 			valid = true
 		default:
-			fmt.Printf("\nERRORERRORERRORERRORERRORERRORERRORERRORERROR")
-			fmt.Printf("\nRRORERROR+-------------------------+RORERRORE")
-			fmt.Printf("\nRORERRORE|          ERROR          |ORERRORER")
-			fmt.Printf("\nORERRORER|MASUKAN INPUT YANG SESUAI|RERRORERR")
-			fmt.Printf("\nRERRORERR+-------------------------+ERRORERRO")
-			fmt.Printf("\nERRORERRORERRORERRORERRORERRORERRORERRORERROR")
-
-			fmt.Printf("\n ______   _____    _____     ____    _____  ")
-			fmt.Printf("\n|  ____| |  __ \\  |  __ \\   / __ \\  |  __ \\ ")
-			fmt.Printf("\n| |__    | |__) | | |__) | | |  | | | |__) |")
-			fmt.Printf("\n|  __|   |  _  /  |  _  /  | |  | | |  _  / ")
-			fmt.Printf("\n| |____  | | \\ \\  | | \\ \\  | |__| | | | \\ \\ ")
-			fmt.Printf("\n|______| |_|  \\_\\ |_|  \\_\\  \\____/  |_|  \\_\\")
+			ErrorInput()
 		}
 	}
 }
