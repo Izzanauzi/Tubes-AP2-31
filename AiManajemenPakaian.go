@@ -261,11 +261,38 @@ func SoftDelete(Pakaian *TabPakaian, n int, id int) {
 	}
 }
 
+func sortPakaianKeBesar(Pakaian *TabPakaian, n int) {
+	for i := 0; i < n; i++ {
+		for j := 0; j < n-i-1; j++ {
+			if (*Pakaian)[j].Aktif && (*Pakaian)[j+1].Aktif {
+				if (*Pakaian)[j].Nama > (*Pakaian)[j+1].Nama {
+					(*Pakaian)[j], (*Pakaian)[j+1] = (*Pakaian)[j+1], (*Pakaian)[j]
+				}
+			}
+		}
+	}
+	fmt.Println("Data berhasil diurutkan terkecil ke besar")
+}
+
+func sortPakaianKeKecil(Pakaian *TabPakaian, n int) {
+	for i := 0; i < n; i++ {
+		for j := 0; j < n-i-1; j++ {
+			if (*Pakaian)[j].Aktif && (*Pakaian)[j+1].Aktif {
+				if (*Pakaian)[j].Nama < (*Pakaian)[j+1].Nama {
+					(*Pakaian)[j], (*Pakaian)[j+1] = (*Pakaian)[j+1], (*Pakaian)[j]
+				}
+			}
+		}
+	}
+	fmt.Println("Data berhasil diurutkan Terbesar ke kecil")
+}
+
 func main() {
 	var Pakaian TabPakaian
 	var nPakaian int = -1
 	var Key int
 	var pilih string
+	var urut int
 	for valid := false; !valid; {
 		welcome()
 		fmt.Scan(&pilih)
@@ -304,7 +331,16 @@ func main() {
 					case "0":
 
 					}
-				// case "5":
+				case "5":
+					fmt.Println("1.mengurut keatas, 2.mengurut kebawah")
+					fmt.Scan(&urut)
+					switch urut {
+						case 1 :
+							sortPakaianKeBesar(&Pakaian , nPakaian)
+						case 2 :
+							sortPakaianKeKecil(&Pakaian , nPakaian)
+						}
+					// case "5":
 				// 	sort()
 				case "0":
 					valid1 = true
