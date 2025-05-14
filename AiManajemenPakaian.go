@@ -21,7 +21,7 @@ type TabPakaian [nmax]DaftarPakaian
 // type TabRiwayat Riwayat
 var NextId int
 
-func welcome() {
+func Welcome() {
 	//Tampilan Pertama Ketika Memulai Program
 	fmt.Printf("\n+------------------------------------------+")
 	fmt.Printf("\n| %-40s |", " ")
@@ -29,14 +29,29 @@ func welcome() {
 	fmt.Printf("\n| %s |", "AI Stylist dan Manajemen Pakaian Digital")
 	fmt.Printf("\n| %-40s |", " ")
 	fmt.Printf("\n+------------------------------------------+")
+}
+
+func Menu(tipe string) {
 	fmt.Printf("\n\n+------------------------------------------+")
 	fmt.Printf("\n| %-18s%-22s |", " ", "MENU")
 	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-40s |", "[1] Daftar Pakaian")
-	fmt.Printf("\n| %-40s |", "[2] Rekomendasi AI")
-	fmt.Printf("\n| %-40s |", "[0] Exit")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\nPilih (1/2/0)?")
+	switch tipe {
+	case "Welcome":
+		fmt.Printf("\n| %-40s |", "[1] Daftar Pakaian")
+		fmt.Printf("\n| %-40s |", "[2] Rekomendasi AI")
+		fmt.Printf("\n| %-40s |", "[0] Exit")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\nPilih (1/2/0)?")
+	case "DaftarPakaian":
+		fmt.Printf("\n| %-40s |", "[1] Tambah Pakaian")
+		fmt.Printf("\n| %-40s |", "[2] Edit Pakaian")
+		fmt.Printf("\n| %-40s |", "[3] Hapus Pakaian")
+		fmt.Printf("\n| %-40s |", "[4] Cari Pakaian")
+		fmt.Printf("\n| %-40s |", "[5] Sortir Pakaian")
+		fmt.Printf("\n| %-40s |", "[0] Home")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\nPilih (1/2/3/4/5/6/0)?")
+	}
 }
 
 func MenuTabPakaian(Pakaian TabPakaian, n int) {
@@ -57,17 +72,8 @@ func MenuTabPakaian(Pakaian TabPakaian, n int) {
 		}
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
-	fmt.Printf("\n\n+------------------------------------------+")
-	fmt.Printf("\n| %-18s%-22s |", " ", "MENU")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-40s |", "[1] Tambah Pakaian")
-	fmt.Printf("\n| %-40s |", "[2] Edit Pakaian")
-	fmt.Printf("\n| %-40s |", "[3] Hapus Pakaian")
-	fmt.Printf("\n| %-40s |", "[4] Cari Pakaian")
-	fmt.Printf("\n| %-40s |", "[5] Sortir Pakaian")
-	fmt.Printf("\n| %-40s |", "[0] Home")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\nPilih (1/2/3/4/5/6/0)?")
+	Menu("DaftarPakaian")
+
 }
 
 func ErrorInput() {
@@ -77,7 +83,59 @@ func ErrorInput() {
 	fmt.Printf("\n|  __|   |  _  /  |  _  /  | |  | | |  _  / ")
 	fmt.Printf("\n| |____  | | \\ \\  | | \\ \\  | |__| | | | \\ \\ ")
 	fmt.Printf("\n|______| |_|  \\_\\ |_|  \\_\\  \\____/  |_|  \\_\\")
-	fmt.Printf("\n%s", "Masukan Input Yang Sesuai")
+	fmt.Printf("\n%-9s%s", " ", "Masukan Input Yang Sesuai!")
+}
+
+func AturanInput(Tipe string) {
+	switch Tipe {
+	case "Nama":
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-14s%-26s |", " ", "NAMA PAKAIAN")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "#1 Masukan Nama Pakaian")
+		fmt.Printf("\n| %-40s |", "#2 Gunakan \"_\" sebagai pengganti spasi")
+		fmt.Printf("\n| %-40s |", "EX. Kemeja_Teknik")
+		fmt.Printf("\n+------------------------------------------+")
+	case "Warna":
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-13s%-27s |", " ", "WARNA PAKAIAN")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "#1 Masukan Warna Pakaian")
+		fmt.Printf("\n| %-40s |", "EX. Merah")
+		fmt.Printf("\n+------------------------------------------+")
+	case "Kategori":
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-12s%-28s |", " ", "KATEGORI PAKAIAN")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "#1 Masukan Kategori Pakaian")
+		fmt.Printf("\n| %-40s |", "#2 Masukan berupa angka")
+		fmt.Printf("\n| %-40s |", "EX. 4")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "01 : Kemeja Lengan Panjang")
+		fmt.Printf("\n| %-40s |", "02 : Kemeja Lengan Pendek")
+		fmt.Printf("\n| %-40s |", "03 : Kaos Lengan Panjang")
+		fmt.Printf("\n| %-40s |", "04 : Kaos Lengan Pendek")
+		fmt.Printf("\n| %-40s |", "05 : Celana Panjang")
+		fmt.Printf("\n| %-40s |", "06 : Celana Pendek")
+		fmt.Printf("\n| %-40s |", "07 : Jaket")
+		fmt.Printf("\n| %-40s |", "08 : Luaran")
+		fmt.Printf("\n| %-40s |", "09 : Sandal")
+		fmt.Printf("\n| %-40s |", "10 : Sepatu")
+		fmt.Printf("\n+------------------------------------------+")
+	case "Formalitas":
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-11s%-29s |", " ", "TINGKAT FORMALITAS")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "#1 Masukan Tingkat Formalitas")
+		fmt.Printf("\n| %-40s |", "#1 Masukan berupa angka")
+		fmt.Printf("\n| %-40s |", "EX. 2")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "1 : Santai")
+		fmt.Printf("\n| %-40s |", "2 : Semi Formal")
+		fmt.Printf("\n| %-40s |", "3 : Formal")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-10s%-2s ", "Formalitas", ":")
+	}
 }
 
 func WriteData(Pakaian TabPakaian, i int) {
@@ -118,86 +176,87 @@ func WriteData(Pakaian TabPakaian, i int) {
 	}
 }
 
-func add(Pakaian *TabPakaian, n int, IsEdit bool) {
+func add(Pakaian *TabPakaian, n int) {
 	//Fitur Tambah Pakaian
 	/*
 		Menambahkan data pakaian kedalam array dengan ketentuan yang sudah diatur
 		Generate Pakaian.Id secara otomatis
 	*/
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-14s%-26s |", " ", "NAMA PAKAIAN")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-40s |", "#1 Masukan Nama Pakaian")
-	fmt.Printf("\n| %-40s |", "#2 Gunakan \"_\" sebagai pengganti spasi")
-	fmt.Printf("\n| %-40s |", "EX. Kemeja_Teknik")
-	fmt.Printf("\n+------------------------------------------+")
+	AturanInput("Nama")
 	fmt.Printf("\n| %-10s%-2s ", "Nama", ":")
 	fmt.Scan(&Pakaian[n].Nama)
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-13s%-27s |", " ", "WARNA PAKAIAN")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-40s |", "#1 Masukan Warna Pakaian")
-	fmt.Printf("\n| %-40s |", "EX. Merah")
-	fmt.Printf("\n+------------------------------------------+")
+	AturanInput("Warna")
 	fmt.Printf("\n| %-10s%-2s ", "Warna", ":")
 	fmt.Scan(&Pakaian[n].Warna)
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-12s%-28s |", " ", "KATEGORI PAKAIAN")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-40s |", "#1 Masukan Kategori Pakaian")
-	fmt.Printf("\n| %-40s |", "#2 Masukan berupa angka")
-	fmt.Printf("\n| %-40s |", "EX. 4")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-40s |", "01 : Kemeja Lengan Panjang")
-	fmt.Printf("\n| %-40s |", "02 : Kemeja Lengan Pendek")
-	fmt.Printf("\n| %-40s |", "03 : Kaos Lengan Panjang")
-	fmt.Printf("\n| %-40s |", "04 : Kaos Lengan Pendek")
-	fmt.Printf("\n| %-40s |", "05 : Celana Panjang")
-	fmt.Printf("\n| %-40s |", "06 : Celana Pendek")
-	fmt.Printf("\n| %-40s |", "07 : Jaket")
-	fmt.Printf("\n| %-40s |", "08 : Luaran")
-	fmt.Printf("\n| %-40s |", "09 : Sandal")
-	fmt.Printf("\n| %-40s |", "10 : Sepatu")
-	fmt.Printf("\n+------------------------------------------+")
+	AturanInput("Kategori")
 	fmt.Printf("\n| %-10s%-2s ", "Kategori", ":")
 	fmt.Scan(&Pakaian[n].Kategori)
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-11s%-29s |", " ", "TINGKAT FORMALITAS")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-40s |", "#1 Masukan Tingkat Formalitas")
-	fmt.Printf("\n| %-40s |", "#1 Masukan berupa angka")
-	fmt.Printf("\n| %-40s |", "EX. 2")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-40s |", "1 : Santai")
-	fmt.Printf("\n| %-40s |", "2 : Semi Formal")
-	fmt.Printf("\n| %-40s |", "3 : Formal")
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-10s%-2s ", "Formalitas", ":")
+	AturanInput("Formalitas")
 	fmt.Scan(&Pakaian[n].Formalitas)
-	if !IsEdit {
-		Pakaian[n].Id = NextId + 1
-	}
+	Pakaian[n].Id = NextId + 1
 	Pakaian[n].Aktif = true
 	NextId++
 }
-func edit(Pakaian *TabPakaian, n *int, Key int) {
+func edit(Pakaian *TabPakaian, n int, Key int) {
 	//Fitur edit
 	/*
-		Data yang diedit dicari berdasarkan 2 angka Id paling akhir
-		Menampilkan data sebelum diedit
-	*/
-	var ganti int = BinarySearch(*Pakaian, *n, Key)
+
+	 */
+	var ganti int = BinarySearch(*Pakaian, n, Key)
+	var TempEdit, backup DaftarPakaian
+	var konfirmasi bool
 	if ganti > -1 {
+		TempEdit.Id = (*Pakaian)[ganti].Id
+		TempEdit.Aktif = true
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-14s%-26s |", " ", "EDIT DATA")
+		fmt.Printf("\n| %-14s%-26s%d |", " ", "ID: ", Pakaian[ganti].Id)
+		fmt.Printf("\n+------------------------------------------+")
+		AturanInput("Nama")
+		fmt.Printf("\nData Sebelumnya\t: %s", Pakaian[ganti].Nama)
+		fmt.Printf("\nData Baru\t: ")
+		fmt.Scan(&TempEdit.Nama)
+		AturanInput("Warna")
+		fmt.Printf("\nData Sebelumnya\t: %s", Pakaian[ganti].Warna)
+		fmt.Printf("\nData Baru\t: ")
+		fmt.Scan(&TempEdit.Warna)
+		AturanInput("Kategori")
+		fmt.Printf("\nData Sebelumnya\t: %d", Pakaian[ganti].Kategori)
+		fmt.Printf("\nData Baru\t: ")
+		fmt.Scan(&TempEdit.Kategori)
+		AturanInput("Formalitas")
+		fmt.Printf("\nData Sebelumnya\t: %d", Pakaian[ganti].Formalitas)
+		fmt.Printf("\nData Baru\t: ")
+		fmt.Scan(&TempEdit.Formalitas)
 		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
-		fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Edit Data", " ")
+		fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Perubahan Data", " ")
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 		fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-12s |", "Id", "Nama Pakaian", "Warna", "Kategori", "Formalitas")
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 		WriteData(*Pakaian, ganti)
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
-		add(Pakaian, ganti, true)
+		backup = (*Pakaian)[ganti]
+		(*Pakaian)[ganti] = TempEdit
+		fmt.Printf("\n%-51s%-53s", " ", "||")
+		fmt.Printf("\n%-50s%-54s", " ", "\\||/")
+		fmt.Printf("\n%-51s%-53s", " ", "\\/")
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		WriteData(*Pakaian, ganti)
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-10s%-30s |", " ", "Konfirmasi Perubahan")
+		fmt.Printf("\n| %-40s |", "[1] Accept")
+		fmt.Printf("\n| %-40s |", "[0] Reject")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n Pilih (1/0)?")
+		fmt.Scan(&konfirmasi)
+		if !konfirmasi {
+			(*Pakaian)[ganti] = backup
+		}
 	} else {
-		fmt.Printf("Data tidak ditemukan")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-10s%-30s |", " ", "Data Tidak Ditemukan")
+		fmt.Printf("\n+------------------------------------------+")
 	}
 }
 
@@ -205,7 +264,7 @@ func min(Pakaian TabPakaian, n, i int) int {
 	//Mencari nilai minimum dalam rentang tertentu
 	var min = i
 	for j := i + 1; j < n; j++ {
-		if Pakaian[i].Id > Pakaian[j].Id {
+		if Pakaian[min].Id > Pakaian[j].Id {
 			min = j
 		}
 	}
@@ -261,30 +320,26 @@ func SoftDelete(Pakaian *TabPakaian, n int, id int) {
 	}
 }
 
-func sortPakaianKeBesar(Pakaian *TabPakaian, n int) {
+func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
+	/*
+		Far, kita diajarinnya pake temp
+		jadi gw ubah
+		sama sedikit gw sederhanain biar jadi 1 func, bukan 2
+	*/
 	for i := 0; i < n; i++ {
-		for j := 0; j < n-i-1; j++ {
-			if (*Pakaian)[j].Aktif && (*Pakaian)[j+1].Aktif {
+		for j := 0; j < n-i; j++ {
+			if Ascending {
 				if (*Pakaian)[j].Nama > (*Pakaian)[j+1].Nama {
 					(*Pakaian)[j], (*Pakaian)[j+1] = (*Pakaian)[j+1], (*Pakaian)[j]
 				}
-			}
-		}
-	}
-	fmt.Println("Data berhasil diurutkan terkecil ke besar")
-}
-
-func sortPakaianKeKecil(Pakaian *TabPakaian, n int) {
-	for i := 0; i < n; i++ {
-		for j := 0; j < n-i-1; j++ {
-			if (*Pakaian)[j].Aktif && (*Pakaian)[j+1].Aktif {
+			} else {
 				if (*Pakaian)[j].Nama < (*Pakaian)[j+1].Nama {
 					(*Pakaian)[j], (*Pakaian)[j+1] = (*Pakaian)[j+1], (*Pakaian)[j]
 				}
 			}
 		}
 	}
-	fmt.Println("Data berhasil diurutkan Terbesar ke kecil")
+	fmt.Println("Data berhasil diurutkan terkecil ke besar")
 }
 
 func main() {
@@ -294,7 +349,8 @@ func main() {
 	var pilih string
 	var urut int
 	for valid := false; !valid; {
-		welcome()
+		Welcome()
+		Menu("Welcome")
 		fmt.Scan(&pilih)
 		switch pilih {
 		case "1":
@@ -304,12 +360,12 @@ func main() {
 				switch pilih {
 				case "1":
 					nPakaian++
-					add(&Pakaian, nPakaian, false)
+					add(&Pakaian, nPakaian)
 				case "2":
 					fmt.Printf("Masukan Id data yang ingin di edit: ")
 					fmt.Scan(&Key)
 					SortById(&Pakaian, nPakaian) //Melakukan selection sort by Id karena akan menggunakan binary search untuk mencari Id
-					edit(&Pakaian, &nPakaian, Key)
+					edit(&Pakaian, nPakaian, Key)
 				case "3":
 					fmt.Printf("Masukan Id data yang ingin di hapus(soft delete): ")
 					fmt.Scan(&Key)
@@ -335,11 +391,11 @@ func main() {
 					fmt.Println("1.mengurut keatas, 2.mengurut kebawah")
 					fmt.Scan(&urut)
 					switch urut {
-						case 1 :
-							sortPakaianKeBesar(&Pakaian , nPakaian)
-						case 2 :
-							sortPakaianKeKecil(&Pakaian , nPakaian)
-						}
+					case 1:
+						SortByNama(&Pakaian, nPakaian, true)
+					case 2:
+						SortByNama(&Pakaian, nPakaian, false)
+					}
 					// case "5":
 				// 	sort()
 				case "0":
@@ -356,26 +412,3 @@ func main() {
 		}
 	}
 }
-
-//   ______   _____    _____     ____    _____
-//  |  ____| |  __ \  |  __ \   / __ \  |  __ \
-//  | |__    | |__) | | |__) | | |  | | | |__) |
-//  |  __|   |  _  /  |  _  /  | |  | | |  _  /
-//  | |____  | | \ \  | | \ \  | |__| | | | \ \
-//  |______| |_|  \_\ |_|  \_\  \____/  |_|  \_\
-
-/*
-
-ERRORERRORERRORERRORERRORERRORERRORERRORERROR
-RRORERROR+-------------------------+RORERRORE
-RORERRORE|          ERROR          |ORERRORER
-ORERRORER|MASUKAN INPUT YANG SESUAI|RERRORERR
-RERRORERR+-------------------------+ERRORERRO
-ERRORERRORERRORERRORERRORERRORERRORERRORERROR
-
-ERRORERRORERRORERRORERRORERRORERRORERRORERROR
-RRORERRORERRORERRORERRORERRORERRORERRORERRORE
-RORERRORERRORERRORERRORERRORERRORERRORERRORER
-ORERRORERRORERRORERRORERRORERRORERRORERRORERR
-RERRORERRORERRORERRORERRORERRORERRORERRORERRO
-*/
