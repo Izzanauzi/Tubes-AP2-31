@@ -104,14 +104,25 @@ func MenuTabPakaian(Pakaian TabPakaian, n int) {
 
 }
 
-func ErrorInput() {
-	fmt.Printf("\n ______   _____    _____     ____    _____  ")
-	fmt.Printf("\n|  ____| |  __ \\  |  __ \\   / __ \\  |  __ \\ ")
-	fmt.Printf("\n| |__    | |__) | | |__) | | |  | | | |__) |")
-	fmt.Printf("\n|  __|   |  _  /  |  _  /  | |  | | |  _  / ")
-	fmt.Printf("\n| |____  | | \\ \\  | | \\ \\  | |__| | | | \\ \\ ")
-	fmt.Printf("\n|______| |_|  \\_\\ |_|  \\_\\  \\____/  |_|  \\_\\")
-	fmt.Printf("\n%-9s%s", " ", "Masukan Input Yang Sesuai!")
+func Arlert(Tipe string) {
+	switch Tipe {
+	case "ErrorInput":
+		fmt.Printf("\n ______   _____    _____     ____    _____  ")
+		fmt.Printf("\n|  ____| |  __ \\  |  __ \\   / __ \\  |  __ \\ ")
+		fmt.Printf("\n| |__    | |__) | | |__) | | |  | | | |__) |")
+		fmt.Printf("\n|  __|   |  _  /  |  _  /  | |  | | |  _  / ")
+		fmt.Printf("\n| |____  | | \\ \\  | | \\ \\  | |__| | | | \\ \\ ")
+		fmt.Printf("\n|______| |_|  \\_\\ |_|  \\_\\  \\____/  |_|  \\_\\")
+		fmt.Printf("\n%-9s%s", " ", "Masukan Input Yang Sesuai!")
+	case "DataTidakAda1":
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-10s%-30s |", " ", "Data Tidak Ditemukan")
+		fmt.Printf("\n+------------------------------------------+")
+	case "DataTidakAda2":
+		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
+		fmt.Printf("\n| %-40s%-60s |", " ", "Data Tidak Ditemukan")
+		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
+	}
 }
 
 func AturanInput(Tipe string) {
@@ -266,7 +277,7 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 		fmt.Printf("\n%-51s%-53s", " ", "||")
 		fmt.Printf("\n%-50s%-54s", " ", "\\||/")
 		fmt.Printf("\n%-51s%-53s", " ", "\\/")
-		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+		Header()
 		WriteData(*Pakaian, ganti)
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 		fmt.Printf("\n+------------------------------------------+")
@@ -280,9 +291,7 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 			(*Pakaian)[ganti] = backup
 		}
 	} else {
-		fmt.Printf("\n+------------------------------------------+")
-		fmt.Printf("\n| %-10s%-30s |", " ", "Data Tidak Ditemukan")
-		fmt.Printf("\n+------------------------------------------+")
+		Arlert("DataTidakAda1")
 	}
 }
 
@@ -312,7 +321,7 @@ func SortById(Pakaian *TabPakaian, n int, Ascending bool) {
 	//Mengurutkan Index array berdasarkan Id
 	var temp DaftarPakaian
 	var Idx int
-	for i := 0; i < n; i++ {
+	for i := 0; i <= n; i++ {
 		if Ascending {
 			Idx = min(*Pakaian, n, i)
 			temp = (*Pakaian)[i]
@@ -345,6 +354,48 @@ func BinarySearch(Pakaian TabPakaian, n int, KeyInt int) int {
 	return -1
 }
 
+func Mengandung(CekString, KeyString string) bool {
+	var j int = 0
+	for i := 0; i <= len(CekString)-len(KeyString); i++ {
+		for j < len(KeyString) && CekString[i+j] == KeyString[j] {
+			j++
+		}
+		if j == len(KeyString) {
+			return true
+		}
+	}
+	return false
+}
+
+func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
+	var found bool
+	for i := 0; i < n; i++ {
+		switch Mode {
+		case "Nama":
+			if Mengandung(Pakaian[i].Nama, KeyString) {
+				if i == 0 {
+					Header()
+				}
+				WriteData(Pakaian, i)
+				found = true
+			}
+		case "Warna":
+			if Mengandung(Pakaian[i].Warna, KeyString) {
+				if i == 0 {
+					Header() //bug
+				}
+				WriteData(Pakaian, i)
+				found = true
+			}
+		}
+	}
+	if !found {
+		Arlert("DataTidakAda2")
+	} else {
+		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+	}
+}
+
 func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 	var found bool
 	for i := 0; i < n; i++ {
@@ -364,10 +415,7 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 		case "Formalitas":
 			if Pakaian[i].Formalitas == KeyInt {
 				if i == 0 {
-					Header()
-				}
-				if i == 0 {
-					Header()
+					Header() //bug
 				}
 				WriteData(Pakaian, i)
 				found = true
@@ -375,9 +423,7 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 		}
 	}
 	if !found {
-		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
-		fmt.Printf("\n| %-40s%-60s |", " ", "Data Tidak Ditemukan")
-		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
+		Arlert("DataTidakAda2")
 	} else {
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
@@ -429,7 +475,7 @@ func main() {
 	var Pakaian TabPakaian
 	var nPakaian int = -1
 	var KeyInt int
-	var pilih string
+	var pilih, KeyString string
 	for valid := false; !valid; {
 		Welcome()
 		Menu("Welcome")
@@ -477,8 +523,15 @@ func main() {
 							fmt.Printf("\n+------------------------------------------+")
 						}
 					case "2":
-						// SquentialSearch()
+						AturanInput("Nama")
+						fmt.Printf("\nMasukan Kata Kunci\t: ")
+						fmt.Scan(&KeyString)
+						SquentialSearchString(Pakaian, nPakaian, KeyString, "Nama")
 					case "3":
+						AturanInput("Warna")
+						fmt.Printf("\nMasukan Kata Kunci\t: ")
+						fmt.Scan(&KeyString)
+						SquentialSearchString(Pakaian, nPakaian, KeyString, "Warna")
 					case "4":
 						AturanInput("Kategori")
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
@@ -553,14 +606,14 @@ func main() {
 				case "0":
 					valid1 = true
 				default:
-					ErrorInput()
+					Arlert("ErrorInput")
 				}
 			}
 		// case "2":
 		case "0":
 			valid = true
 		default:
-			ErrorInput()
+			Arlert("ErrorInput")
 		}
 	}
 }
