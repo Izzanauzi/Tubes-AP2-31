@@ -9,7 +9,7 @@ const nmax int = 1024
 type DaftarPakaian struct {
 	Id, Formalitas, Kategori, list int
 	Nama, Warna                    string
-	Aktif                          bool // ini untuk soft delete true = aktif dan false = Softdelete
+	Aktif                          bool // Flag status untuk data
 }
 type TabPakaian [nmax]DaftarPakaian
 
@@ -21,14 +21,23 @@ type TabPakaian [nmax]DaftarPakaian
 // type TabRiwayat Riwayat
 var NextId int
 
-func Welcome() {
+func Welcome(tipe string) {
 	//Tampilan Pertama Ketika Memulai Program
-	fmt.Printf("\n+------------------------------------------+")
-	fmt.Printf("\n| %-40s |", " ")
-	fmt.Printf("\n| %-7s%-33s |", " ", "Selamat Datang Di Aplikasi")
-	fmt.Printf("\n| %s |", "AI Stylist dan Manajemen Pakaian Digital")
-	fmt.Printf("\n| %-40s |", " ")
-	fmt.Printf("\n+------------------------------------------+")
+	switch tipe {
+	case "Start":
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", " ")
+		fmt.Printf("\n| %-7s%-33s |", " ", "Selamat Datang Di Aplikasi")
+		fmt.Printf("\n| %s |", "AI Stylist dan Manajemen Pakaian Digital")
+		fmt.Printf("\n| %-40s |", " ")
+		fmt.Printf("\n+------------------------------------------+")
+	case "DaftarPakaian":
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", " ")
+		fmt.Printf("\n| %-11s%-29s |", " ", "Manajemen Pakaian")
+		fmt.Printf("\n| %-40s |", " ")
+		fmt.Printf("\n+------------------------------------------+")
+	}
 }
 
 func Menu(tipe string) {
@@ -37,17 +46,18 @@ func Menu(tipe string) {
 	fmt.Printf("\n+------------------------------------------+")
 	switch tipe {
 	case "Welcome":
-		fmt.Printf("\n| %-40s |", "[1] Daftar Pakaian")
+		fmt.Printf("\n| %-40s |", "[1] Manajemen Pakaian")
 		fmt.Printf("\n| %-40s |", "[2] Rekomendasi AI")
 		fmt.Printf("\n| %-40s |", "[0] Exit")
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\nPilih (1/2/0)?")
-	case "DaftarPakaian":
-		fmt.Printf("\n| %-40s |", "[1] Tambah Pakaian")
-		fmt.Printf("\n| %-40s |", "[2] Edit Pakaian")
-		fmt.Printf("\n| %-40s |", "[3] Hapus Pakaian")
-		fmt.Printf("\n| %-40s |", "[4] Cari Pakaian")
-		fmt.Printf("\n| %-40s |", "[5] Sortir Pakaian")
+	case "ManajemenPakaian":
+		fmt.Printf("\n| %-40s |", "[1] Daftar Pakaian")
+		fmt.Printf("\n| %-40s |", "[2] Tambah Pakaian")
+		fmt.Printf("\n| %-40s |", "[3] Edit Pakaian")
+		fmt.Printf("\n| %-40s |", "[4] Hapus Pakaian")
+		fmt.Printf("\n| %-40s |", "[5] Cari Pakaian")
+		fmt.Printf("\n| %-40s |", "[6] Sortir Pakaian")
 		fmt.Printf("\n| %-40s |", "[0] Home")
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\nPilih (1/2/3/4/5/0)?")
@@ -100,8 +110,6 @@ func MenuTabPakaian(Pakaian TabPakaian, n int) {
 		}
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
-	Menu("DaftarPakaian")
-
 }
 
 func Arlert(Tipe string) {
@@ -248,8 +256,8 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 		TempEdit.Id = (*Pakaian)[ganti].Id
 		TempEdit.Aktif = true
 		fmt.Printf("\n+------------------------------------------+")
-		fmt.Printf("\n| %-14s%-26s |", " ", "EDIT DATA")
-		fmt.Printf("\n| %-14s%-26s%d |", " ", "ID: ", Pakaian[ganti].Id)
+		fmt.Printf("\n| %-15s%-25s |", " ", "EDIT DATA")
+		fmt.Printf("\n| %-15s%-3s%6d%15s |", " ", "ID: ", Pakaian[ganti].Id, " ")
 		fmt.Printf("\n+------------------------------------------+")
 		AturanInput("Nama")
 		fmt.Printf("\nData Sebelumnya\t: %s", Pakaian[ganti].Nama)
@@ -324,15 +332,12 @@ func SortById(Pakaian *TabPakaian, n int, Ascending bool) {
 	for i := 0; i <= n; i++ {
 		if Ascending {
 			Idx = min(*Pakaian, n, i)
-			temp = (*Pakaian)[i]
-			(*Pakaian)[i] = (*Pakaian)[Idx]
-			(*Pakaian)[Idx] = temp
 		} else {
 			Idx = max(*Pakaian, n, i)
-			temp = (*Pakaian)[i]
-			(*Pakaian)[i] = (*Pakaian)[Idx]
-			(*Pakaian)[Idx] = temp
 		}
+		temp = (*Pakaian)[i]
+		(*Pakaian)[i] = (*Pakaian)[Idx]
+		(*Pakaian)[Idx] = temp
 	}
 }
 
@@ -373,20 +378,18 @@ func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 		switch Mode {
 		case "Nama":
 			if Mengandung(Pakaian[i].Nama, KeyString) {
-				if i == 0 {
-					Header()
-				}
-				WriteData(Pakaian, i)
 				found = true
 			}
 		case "Warna":
 			if Mengandung(Pakaian[i].Warna, KeyString) {
-				if i == 0 {
-					Header() //bug
-				}
-				WriteData(Pakaian, i)
 				found = true
 			}
+		}
+		if found {
+			if i == 0 {
+				Header()
+			}
+			WriteData(Pakaian, i)
 		}
 	}
 	if !found {
@@ -406,20 +409,18 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 		switch Mode {
 		case "Kategori":
 			if Pakaian[i].Kategori == KeyInt {
-				if i == 0 {
-					Header()
-				}
-				WriteData(Pakaian, i)
 				found = true
 			}
 		case "Formalitas":
 			if Pakaian[i].Formalitas == KeyInt {
-				if i == 0 {
-					Header() //bug
-				}
-				WriteData(Pakaian, i)
 				found = true
 			}
+		}
+		if found {
+			if i == 0 {
+				Header()
+			}
+			WriteData(Pakaian, i)
 		}
 	}
 	if !found {
@@ -440,16 +441,11 @@ func SoftDelete(Pakaian *TabPakaian, n int, id int) {
 			fmt.Println("Data sudah tidak aktif")
 		}
 	} else {
-		fmt.Println("Data Tidak ada")
+		Arlert("DataTidakAda1")
 	}
 }
 
 func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
-	/*
-		Far, kita diajarinnya pake temp
-		jadi gw ubah
-		sama sedikit gw sederhanain biar jadi 1 func, bukan 2
-	*/
 	var temp DaftarPakaian
 	for i := 0; i < n; i++ {
 		for j := 0; j < n-i; j++ {
@@ -477,24 +473,27 @@ func main() {
 	var KeyInt int
 	var pilih, KeyString string
 	for valid := false; !valid; {
-		Welcome()
+		Welcome("Start")
 		Menu("Welcome")
 		fmt.Scan(&pilih)
 		switch pilih {
-		case "1":
+		case "1": //Manajemen Pakaian
 			for valid1 := false; !valid1; {
-				MenuTabPakaian(Pakaian, nPakaian)
+				// Welcome("DaftarPakaian")
+				Menu("ManajemenPakaian")
 				fmt.Scan(&pilih)
 				switch pilih {
-				case "1":
+				case "1": //Daftar Pakaian
+					MenuTabPakaian(Pakaian, nPakaian)
+				case "2": //Tambah Pakaian
 					nPakaian++
 					add(&Pakaian, nPakaian)
-				case "2":
+				case "3": //Edit Pakaian
 					fmt.Printf("Masukan Id data yang ingin di edit: ")
 					fmt.Scan(&KeyInt)
 					SortById(&Pakaian, nPakaian, true) //Melakukan selection sort by Id karena akan menggunakan binary search untuk mencari Id
 					edit(&Pakaian, nPakaian, KeyInt)
-				case "3":
+				case "4":
 					fmt.Printf("Masukan Id data yang ingin di hapus(soft delete): ")
 					fmt.Scan(&KeyInt)
 					SortById(&Pakaian, nPakaian, true)
@@ -505,7 +504,7 @@ func main() {
 					} else {
 						fmt.Println("Data tidak ditemukan / sudah tidak aktif") // sejauh ini sudah bisa didelete, gua push dulu ada acara gua mya >-<
 					}
-				case "4":
+				case "5":
 					Menu("Search")
 					fmt.Scan(&pilih)
 					switch pilih {
@@ -518,9 +517,7 @@ func main() {
 							WriteData(Pakaian, BinarySearch(Pakaian, nPakaian, KeyInt))
 							fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 						} else {
-							fmt.Printf("\n+------------------------------------------+")
-							fmt.Printf("\n| %-10s%-30s |", " ", "Data Tidak Ditemukan")
-							fmt.Printf("\n+------------------------------------------+")
+							Arlert("DataTidakAda1")
 						}
 					case "2":
 						AturanInput("Nama")
@@ -545,7 +542,7 @@ func main() {
 					case "0":
 
 					}
-				case "5":
+				case "6":
 					Menu("Sort")
 					fmt.Scan(&pilih)
 					switch pilih {
