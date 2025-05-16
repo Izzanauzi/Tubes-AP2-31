@@ -96,7 +96,7 @@ func Menu(tipe string) {
 
 // Header menampilkan tabel data palaian
 func Header() { 
-	//digunakan sebagai bagian atas yabel daftar pakaian
+	//digunakan sebagai bagian atas tabel daftar pakaian
 	fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-12s |", "Id", "Nama Pakaian", "Warna", "Kategori", "Formalitas")
 	fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
@@ -389,6 +389,7 @@ func SortById(Pakaian *TabPakaian, n int, Ascending bool) {
 	}
 }
 
+// BinarySearch mencari pakaian berdasarkan ID dengan metode binary search
 func BinarySearch(Pakaian TabPakaian, n int, KeyInt int) int {
 	//Pencarian Id menggunakan binary search
 	var left, mid, right int
@@ -397,16 +398,17 @@ func BinarySearch(Pakaian TabPakaian, n int, KeyInt int) int {
 	for left <= right {
 		mid = (left + right) / 2
 		if Pakaian[mid].Id == KeyInt {
-			return mid
+			return mid // Ditemukan
 		} else if Pakaian[mid].Id < KeyInt {
 			left = mid + 1
 		} else {
 			right = mid - 1
 		}
 	}
-	return -1
+	return -1 // Tidak ditemukan
 }
 
+// Mengandung mengecek apakah KeyString terdapat dalam CekString
 func Mengandung(CekString, KeyString string) bool {
 	var j int = 0
 	for i := 0; i <= len(CekString)-len(KeyString); i++ {
@@ -414,12 +416,13 @@ func Mengandung(CekString, KeyString string) bool {
 			j++
 		}
 		if j == len(KeyString) {
-			return true
+			return true // Ditemukan
 		}
 	}
-	return false
+	return false // Tidak ditemukan
 }
 
+// SquentialSearchString mencari string (Nama/Warna) dalam array pakaian
 func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 	var found bool
 	for i := 0; i < n; i++ {
@@ -435,18 +438,19 @@ func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 		}
 		if found {
 			if i == 0 {
-				Header()
+				Header() // Tampilkan Header hanya sekali saat pertama ditemukan
 			}
 			WriteData(Pakaian, i)
 		}
 	}
 	if !found {
-		Arlert("DataTidakAda2")
+		Arlert("DataTidakAda2") // Jika tidak ditemukan
 	} else {
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
 }
 
+// SquentialSearcInt mencari int (Kategori/Formalitas) dalam array pakaian
 func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 	var found bool
 	for i := 0; i < n; i++ {
@@ -466,47 +470,50 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 		}
 		if found {
 			if i == 0 {
-				Header()
+				Header() // Tampilkan header hanya sekali
 			}
 			WriteData(Pakaian, i)
 		}
 	}
 	if !found {
-		Arlert("DataTidakAda2")
+		Arlert("DataTidakAda2")// jika tidak ditemukan
 	} else {
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
 }
 
+// SoftDelete menonaktifkan data pakaian berdasarkan ID (soft delete)
 func SoftDelete(Pakaian *TabPakaian, n int, id int) {
 	//Memberikan status false pada array yang berarti data telah di nonaktifkan / dihapus
-	idx := BinarySearch(*Pakaian, n, id)
+	idx := BinarySearch(*Pakaian, n, id)// cari indeks ID
 	if idx != -1 {
 		if (*Pakaian)[idx].Aktif {
-			(*Pakaian)[idx].Aktif = false
+			(*Pakaian)[idx].Aktif = false// Nonaktifkan data
 			fmt.Println("Data berhasil di nonaktifkan")
 		} else {
 			fmt.Println("Data sudah tidak aktif")
 		}
 	} else {
-		Arlert("DataTidakAda1")
+		Arlert("DataTidakAda1") // Tampilkan pesan jika ID tidak ditemukan
 	}
 }
 
+//Fungsi unruk mengurutkan berdasarkan nama pakaian menggunakan bubble sort(gua namanya tadi)
 func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
+
 	var temp DaftarPakaian
 	for i := 0; i < n; i++ {
 		for j := 0; j < n-i; j++ {
 			if Ascending {
 				if (*Pakaian)[j].Nama > (*Pakaian)[j+1].Nama {
-					temp = (*Pakaian)[j]
-					(*Pakaian)[j] = (*Pakaian)[j+1]
+					temp = (*Pakaian)[j]				//simpan sementara
+					(*Pakaian)[j] = (*Pakaian)[j+1]		//tukar
 					(*Pakaian)[j+1] = temp
 				}
 			} else {
 				if (*Pakaian)[j].Nama < (*Pakaian)[j+1].Nama {
-					temp = (*Pakaian)[j]
-					(*Pakaian)[j] = (*Pakaian)[j+1]
+					temp = (*Pakaian)[j]				//simpan sementara
+					(*Pakaian)[j] = (*Pakaian)[j+1]		//tukar
 					(*Pakaian)[j+1] = temp
 				}
 			}
@@ -516,16 +523,18 @@ func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
 }
 
 func main() {
-	var Pakaian TabPakaian
-	var nPakaian int = -1
-	var KeyInt int
-	var pilih, KeyString string
+	var Pakaian TabPakaian				//array utama penyimpan pakaian
+	var nPakaian int = -1				// indeks akhir array
+	var KeyInt int						// input ID atau nilai numerik lainnya
+	var pilih, KeyString string			//pilihan menu dan kata kunci pencarian
+
 	for valid := false; !valid; {
-		Welcome("Start")
-		Menu("Welcome")
+		Welcome("Start") //menampilkan halaman awal
+		Menu("Welcome")	// menampilkan menu utama
 		fmt.Scan(&pilih)
+
 		switch pilih {
-		case "1": //Manajemen Pakaian
+		case "1": //Menu Manajemen Pakaian
 			for valid1 := false; !valid1; {
 				// Welcome("DaftarPakaian")
 				Menu("ManajemenPakaian")
@@ -556,7 +565,7 @@ func main() {
 					Menu("Search")
 					fmt.Scan(&pilih)
 					switch pilih {
-					case "1": //
+					case "1": //Berdasarkan ID
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyInt)
 						SortById(&Pakaian, nPakaian, true)
@@ -567,34 +576,38 @@ func main() {
 						} else {
 							Arlert("DataTidakAda1")
 						}
-					case "2":
+					
+					case "2": // Berdasarkan Nama
 						AturanInput("Nama")
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyString)
 						SquentialSearchString(Pakaian, nPakaian, KeyString, "Nama")
-					case "3":
-						AturanInput("Warna")
+					
+					case "3":// Berdasarkan warna
+						AturanInput("Warna") 
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyString)
 						SquentialSearchString(Pakaian, nPakaian, KeyString, "Warna")
-					case "4":
+					
+					case "4": // Berdasarkan kategori
 						AturanInput("Kategori")
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyInt)
 						SquentialSearcInt(Pakaian, nPakaian, KeyInt, "Kategori")
-					case "5":
+					
+					case "5": // berdasarkan Formalitas
 						AturanInput("Formalitas")
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyInt)
 						SquentialSearcInt(Pakaian, nPakaian, KeyInt, "Formalitas")
 					case "0":
-
+						//Kembali
 					}
-				case "6":
+				case "6": // Menu sortir
 					Menu("Sort")
 					fmt.Scan(&pilih)
 					switch pilih {
-					case "1":
+					case "1": // Berdasarkan ID
 						Menu("Ascending")
 						fmt.Scan(&pilih)
 						switch pilih {
@@ -604,7 +617,7 @@ func main() {
 							SortById(&Pakaian, nPakaian, false)
 						case "0":
 						}
-					case "2":
+					case "2": // Berdasarkan Nama
 						Menu("Ascending")
 						fmt.Scan(&pilih)
 						switch pilih {
@@ -613,6 +626,7 @@ func main() {
 						case "2":
 							SortByNama(&Pakaian, nPakaian, false)
 						case "0":
+							//Kembali
 						}
 					case "3":
 						Menu("Ascending")
@@ -645,18 +659,19 @@ func main() {
 						case "0":
 						}
 					case "0":
+						// kembali
 					}
 					// case "5":
 				// 	sort()
 				case "0":
-					valid1 = true
+					valid1 = true // kembali ke menu utama
 				default:
 					Arlert("ErrorInput")
 				}
 			}
 		// case "2":
 		case "0":
-			valid = true
+			valid = true // keluar dari program
 		default:
 			Arlert("ErrorInput")
 		}
