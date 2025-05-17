@@ -271,11 +271,9 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 			3. Jika data tidak ditemukan, tampilkan pesan error
 		Final State		: Jika konfirmasi diterima, data pada indeks hasil pencarian telah diperbarui. Jika ditolak, data tetap seperti semula
 	*/
-
 	var ganti int = BinarySearch(*Pakaian, n, KeyInt) // Cari index data berdasarkan ID
 	var TempEdit, backup DaftarPakaian
 	var konfirmasi bool
-
 	if ganti > -1 && Pakaian[ganti].Aktif {
 		TempEdit.Id = (*Pakaian)[ganti].Id
 		TempEdit.Aktif = true
@@ -332,7 +330,6 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 	}
 }
 
-// min mencari indeks dengan nilai Id minimum dari posisi i sampai n
 func min(Pakaian TabPakaian, n, i int) int {
 	/*
 		Mengembalikan nilai minimum dari array Pakaian dari index array integer i sampai jumlah sebanyak integer n
@@ -346,7 +343,6 @@ func min(Pakaian TabPakaian, n, i int) int {
 	return min // kembalikan indeks minimum
 }
 
-// max mencari indeks dengan nilai Id maksimum dari posisi i sampai n
 func max(Pakaian TabPakaian, n, i int) int {
 	/*
 		Mengembalikan nilai maksimum array Pakaian dari index array integer i sampai jumlah sebanyak integer n
@@ -360,7 +356,6 @@ func max(Pakaian TabPakaian, n, i int) int {
 	return max // Kembalikan indeks maksimum
 }
 
-// SortById mengurutkan data pakaian berdasarkan Id
 func SortById(Pakaian *TabPakaian, n int, Ascending bool) {
 	/*
 		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TabPakaian, integer n sebagai jumlah data array, dan boolean Ascending untuk menentukan urutan (true = naik, false = turun)
@@ -387,7 +382,6 @@ func SortById(Pakaian *TabPakaian, n int, Ascending bool) {
 	}
 }
 
-// BinarySearch mencari pakaian berdasarkan ID dengan metode binary search
 func BinarySearch(Pakaian TabPakaian, n int, KeyInt int) int {
 	/*
 		Mengembalikan index array Pakaian yang memiliki Id yang sama seperti KeyInt, jika data sebanyak integer n tidak memiliki Id yang sesuai dengan KeyInt kembalikan integer -1
@@ -410,7 +404,6 @@ func BinarySearch(Pakaian TabPakaian, n int, KeyInt int) int {
 	return -1 // Tidak ditemukan
 }
 
-// SquentialSearchString mencari string (Nama/Warna) dalam array pakaian
 func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 	/*
 		Initial State	: Terdefinisi array Pakaian bertipe TabPakaian, integer n sebagai jumlah array, string KeyString sebagai kata kunci pencarian, dan string Mode sebagai jenis data yang dicari ("Nama" atau "Warna")
@@ -423,7 +416,6 @@ func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 			- Jika tidak ditemukan, tampilkan pesan bahwa data tidak ditemukan
 		Final State		: Data pakaian yang mengandung KeyString di field yang sesuai telah ditampilkan, atau ditampilkan pesan bahwa data tidak ditemukan
 	*/
-
 	var found bool
 	for i := 0; i < n; i++ {
 		switch Mode {
@@ -438,19 +430,18 @@ func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 		}
 		if found {
 			if i == 0 {
-				Table() // Tampilkan Table hanya sekali saat pertama ditemukan
+				Table()
 			}
 			WriteData(Pakaian, i)
 		}
 	}
 	if !found {
-		Arlert("DataTidakAda2") // Jika tidak ditemukan
+		Arlert("DataTidakAda2")
 	} else {
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
 }
 
-// SquentialSearcInt mencari int (Kategori/Formalitas) dalam array pakaian
 func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 	/*
 		Initial State	: Terdefinisi array Pakaian bertipe TabPakaian, integer n sebagai jumlah array, integer KeyInt sebagai kata kunci pencarian, dan string Mode sebagai jenis data yang dicari ("Kategori" atau "Formalitas")
@@ -481,50 +472,69 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 		}
 		if found {
 			if i == 0 {
-				Table() // Tampilkan Table hanya sekali
+				Table()
 			}
 			WriteData(Pakaian, i)
 		}
 	}
 	if !found {
-		Arlert("DataTidakAda2") // jika tidak ditemukan
+		Arlert("DataTidakAda2")
 	} else {
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
 }
 
-// SoftDelete menonaktifkan data pakaian berdasarkan ID (soft delete)
 func SoftDelete(Pakaian *TabPakaian, n int, id int) {
-	//Memberikan status false pada array yang berarti data telah di nonaktifkan / dihapus
-	idx := BinarySearch(*Pakaian, n, id) // cari indeks ID
-	if idx != -1 {
+	/*
+		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TanPakaian, integer n sebagai jumlah data array, dan integer id array yang akan di nonaktifkan
+		Process			:
+		Final State		:
+	*/
+	idx := BinarySearch(*Pakaian, n, id)
+	if idx > -1 {
 		if (*Pakaian)[idx].Aktif {
-			(*Pakaian)[idx].Aktif = false // Nonaktifkan data
+			(*Pakaian)[idx].Aktif = false
 			fmt.Println("Data berhasil di nonaktifkan")
 		} else {
 			fmt.Println("Data sudah tidak aktif")
 		}
 	} else {
-		Arlert("DataTidakAda1") // Tampilkan pesan jika ID tidak ditemukan
+		Arlert("DataTidakAda1")
 	}
 }
 
-// Fungsi unruk mengurutkan berdasarkan nama pakaian menggunakan bubble sort(gua namanya tadi)
-func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
+func HardDelete(Pakaian *TabPakaian, n int, id int) {
+	/*
+		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TanPakaian, integer n sebagai jumlah data array, dan integer id array yang akan di delete permanen
+		Process			:
+		Final State		:
+	*/
+	idx := BinarySearch(*Pakaian, n, id)
+	if idx > -1 && !Pakaian[idx].Aktif {
+		for i := idx; i < n; i++ {
+			Pakaian[i] = Pakaian[i+1]
+		}
+		fmt.Printf("Data Berhasil di hapus")
+	} else {
+		Arlert("DataTidakAda1")
+	}
+}
 
+func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
+	//ganti jadi insertion sort
 	var temp DaftarPakaian
 	for i := 0; i < n; i++ {
 		for j := 0; j < n-i; j++ {
 			if Ascending {
 				if (*Pakaian)[j].Nama > (*Pakaian)[j+1].Nama {
-					temp = (*Pakaian)[j]            //simpan sementara
-					(*Pakaian)[j] = (*Pakaian)[j+1] //tukar
+					temp = (*Pakaian)[j]
+					(*Pakaian)[j] = (*Pakaian)[j+1]
 					(*Pakaian)[j+1] = temp
 				}
 			} else {
 				if (*Pakaian)[j].Nama < (*Pakaian)[j+1].Nama {
-					temp = (*Pakaian)[j]            //simpan sementara
-					(*Pakaian)[j] = (*Pakaian)[j+1] //tukar
+					temp = (*Pakaian)[j]
+					(*Pakaian)[j] = (*Pakaian)[j+1]
 					(*Pakaian)[j+1] = temp
 				}
 			}
@@ -587,26 +597,25 @@ func main() {
 						} else {
 							Arlert("DataTidakAda1")
 						}
-
-					case "2": // Berdasarkan Nama
+					case "2": //Berdasarkan Nama
 						AturanInput("Nama")
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyString)
 						SquentialSearchString(Pakaian, nPakaian, KeyString, "Nama")
 
-					case "3": // Berdasarkan warna
+					case "3": //Berdasarkan warna
 						AturanInput("Warna")
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyString)
 						SquentialSearchString(Pakaian, nPakaian, KeyString, "Warna")
 
-					case "4": // Berdasarkan kategori
+					case "4": //Berdasarkan kategori
 						AturanInput("Kategori")
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyInt)
 						SquentialSearcInt(Pakaian, nPakaian, KeyInt, "Kategori")
 
-					case "5": // berdasarkan Formalitas
+					case "5": //berdasarkan Formalitas
 						AturanInput("Formalitas")
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyInt)
