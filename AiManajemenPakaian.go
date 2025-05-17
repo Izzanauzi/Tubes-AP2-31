@@ -12,7 +12,6 @@ type DaftarPakaian struct {
 	Aktif                          bool   // Flag status untuk data
 }
 
-// TabPakaian adalah array dari DaftarPakaian untuk menampung seluruh data pakaian
 type TabPakaian [nmax]DaftarPakaian
 
 //	type Riwayat struct {
@@ -22,12 +21,9 @@ type TabPakaian [nmax]DaftarPakaian
 //
 // type TabRiwayat Riwayat
 
-// NextId menyimpan nilai ID pakaian berikutnya
-var NextId int
+var NextId int //Variabel untuk generate Id Otomatis
 
-// Welcome menampilkan header tampilan berdasarkan tipe
 func Welcome(tipe string) {
-	//Tampilan Pertama Ketika Memulai Program
 	switch tipe {
 	case "Start":
 		fmt.Printf("\n+------------------------------------------+")
@@ -45,7 +41,6 @@ func Welcome(tipe string) {
 	}
 }
 
-// Menu menampilkan menu utama atau submenu berdasarkan tipe
 func Menu(tipe string) {
 	fmt.Printf("\n\n+------------------------------------------+")
 	fmt.Printf("\n| %-18s%-22s |", " ", "MENU")
@@ -57,7 +52,7 @@ func Menu(tipe string) {
 		fmt.Printf("\n| %-40s |", "[0] Exit")
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\nPilih (1/2/0)?")
-	case "ManajemenPakaian": // tampilan opsi setelah memilih Manajemen Pakaian
+	case "ManajemenPakaian": //Tampilan opsi setelah memilih Manajemen Pakaian
 		fmt.Printf("\n| %-40s |", "[1] Daftar Pakaian")
 		fmt.Printf("\n| %-40s |", "[2] Tambah Pakaian")
 		fmt.Printf("\n| %-40s |", "[3] Edit Pakaian")
@@ -67,7 +62,7 @@ func Menu(tipe string) {
 		fmt.Printf("\n| %-40s |", "[0] Home")
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\nPilih (1/2/3/4/5/0)?")
-	case "Search": //tampilan saat memilih Cari Pakaian
+	case "Search": //Tampilan saat memilih Cari Pakaian
 		fmt.Printf("\n| %-40s |", "[1] Search Berdasarkan ID")
 		fmt.Printf("\n| %-40s |", "[2] Search Berdasarkan Nama")
 		fmt.Printf("\n| %-40s |", "[3] Search Berdasarkan Warna")
@@ -76,7 +71,7 @@ func Menu(tipe string) {
 		fmt.Printf("\n| %-40s |", "[0] Back")
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\nPilih (1/2/3/4/5/0)?")
-	case "Sort": //tampilan saat memilih sotir Pakaian
+	case "Sort": //Tampilan saat memilih sotir Pakaian
 		fmt.Printf("\n| %-40s |", "[1] Sortir Berdasarkan ID")
 		fmt.Printf("\n| %-40s |", "[2] Sortir Berdasarkan Nama")
 		fmt.Printf("\n| %-40s |", "[3] Sortir Berdasarkan Warna")
@@ -85,7 +80,7 @@ func Menu(tipe string) {
 		fmt.Printf("\n| %-40s |", "[0] Back")
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\nPilih (1/2/3/4/5/0)?")
-	case "Ascending": // Tampilan menu sorting ascending/descending
+	case "Ascending": //Tampilan menu sorting ascending/descending
 		fmt.Printf("\n| %-40s |", "[1] Ascending")
 		fmt.Printf("\n| %-40s |", "[2] Descending")
 		fmt.Printf("\n| %-40s |", "[0] Back")
@@ -94,8 +89,7 @@ func Menu(tipe string) {
 	}
 }
 
-// Header menampilkan tabel data palaian
-func Header() {
+func Table() {
 	//digunakan sebagai bagian atas tabel daftar pakaian
 	fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	fmt.Printf("\n| %-6s | %-30s | %-15s | %-25s | %-12s |", "Id", "Nama Pakaian", "Warna", "Kategori", "Formalitas")
@@ -113,7 +107,7 @@ func MenuTabPakaian(Pakaian TabPakaian, n int) {
 		fmt.Printf("\n| %-36s%-28s%-36s |", " ", "Silahkan Tambah Data Pakaian", " ")
 		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 	} else { //Jika array sudah diisi, maka akan menulis semua data array
-		Header()
+		Table()
 		for i := 0; i <= n; i++ { //Looping untuk menulis semua data array
 			WriteData(Pakaian, i) // Menampilkan data pakaian ke i
 		}
@@ -296,7 +290,7 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 	var TempEdit, backup DaftarPakaian                // Data sementara serta backup sebelum diubah
 	var konfirmasi bool                               // Untuk menyimpan konfirmasi user
 
-	if ganti > -1 {
+	if ganti > -1 && Pakaian[ganti].Aktif {
 		TempEdit.Id = (*Pakaian)[ganti].Id
 		TempEdit.Aktif = true // Set data aktif
 
@@ -333,7 +327,7 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 		// Menampilkan perbandingan sebelum dan sesudah
 		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 		fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Perubahan Data", " ")
-		Header()
+		Table()
 		WriteData(*Pakaian, ganti) // data Sebelum
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 
@@ -345,7 +339,7 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 		fmt.Printf("\n%-50s%-54s", " ", "\\||/")
 		fmt.Printf("\n%-51s%-53s", " ", "\\/")
 
-		Header()
+		Table()
 		WriteData(*Pakaian, ganti) // data Sesudah
 
 		// form Konfirmasi akhir
@@ -443,20 +437,6 @@ func BinarySearch(Pakaian TabPakaian, n int, KeyInt int) int {
 	return -1 // Tidak ditemukan
 }
 
-// Mengandung mengecek apakah KeyString terdapat dalam CekString
-func Mengandung(CekString, KeyString string) bool {
-	var j int = 0
-	for i := 0; i <= len(CekString)-len(KeyString); i++ {
-		for j < len(KeyString) && CekString[i+j] == KeyString[j] {
-			j++
-		}
-		if j == len(KeyString) {
-			return true // Ditemukan
-		}
-	}
-	return false // Tidak ditemukan
-}
-
 // SquentialSearchString mencari string (Nama/Warna) dalam array pakaian
 func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 	/*
@@ -466,7 +446,7 @@ func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 			2. Untuk setiap elemen:
 				- Jika Mode adalah "Nama", periksa apakah Nama mengandung KeyString dan memiliki status Aktif true
 				- Jika Mode adalah "Warna", periksa apakah Warna mengandung KeyString dan memiliki status Aktif true
-				- Jika ditemukan, tampilkan header (hanya sekali) ketika iterasi pertama dan tampilkan data pakaian pada indeks tersebut
+				- Jika ditemukan, tampilkan Table (hanya sekali) ketika iterasi pertama dan tampilkan data pakaian pada indeks tersebut
 			- Jika tidak ditemukan, tampilkan pesan bahwa data tidak ditemukan
 		Final State		: Data pakaian yang mengandung KeyString di field yang sesuai telah ditampilkan, atau ditampilkan pesan bahwa data tidak ditemukan
 	*/
@@ -475,17 +455,17 @@ func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 	for i := 0; i < n; i++ {
 		switch Mode {
 		case "Nama":
-			if Mengandung(Pakaian[i].Nama, KeyString) && Pakaian[i].Aktif {
+			if Pakaian[i].Nama == KeyString && Pakaian[i].Aktif {
 				found = true
 			}
 		case "Warna":
-			if Mengandung(Pakaian[i].Warna, KeyString) && Pakaian[i].Aktif {
+			if Pakaian[i].Warna == KeyString && Pakaian[i].Aktif {
 				found = true
 			}
 		}
 		if found {
 			if i == 0 {
-				Header() // Tampilkan Header hanya sekali saat pertama ditemukan
+				Table() // Tampilkan Table hanya sekali saat pertama ditemukan
 			}
 			WriteData(Pakaian, i)
 		}
@@ -506,7 +486,7 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 			2. Untuk setiap elemen:
 				- Jika Mode adalah "Kategori", periksa apakah Kategori mengandung KeyInt dan memiliki status Aktif true
 				- Jika Mode adalah "Formalitas", periksa apakah Formalitas mengandung KeyInt dan memiliki status Aktif true
-				- Jika ditemukan, tampilkan header (hanya sekali) ketika iterasi pertama dan tampilkan data pakaian pada indeks tersebut
+				- Jika ditemukan, tampilkan Table (hanya sekali) ketika iterasi pertama dan tampilkan data pakaian pada indeks tersebut
 			- Jika tidak ditemukan, tampilkan pesan bahwa data tidak ditemukan
 		Final State		: Data pakaian yang mengandung KeyInt di field yang sesuai telah ditampilkan, atau ditampilkan pesan bahwa data tidak ditemukan
 	*/
@@ -528,7 +508,7 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 		}
 		if found {
 			if i == 0 {
-				Header() // Tampilkan header hanya sekali
+				Table() // Tampilkan Table hanya sekali
 			}
 			WriteData(Pakaian, i)
 		}
@@ -628,7 +608,7 @@ func main() {
 						fmt.Scan(&KeyInt)
 						SortById(&Pakaian, nPakaian, true)
 						if BinarySearch(Pakaian, nPakaian, KeyInt) > -1 {
-							Header()
+							Table()
 							WriteData(Pakaian, BinarySearch(Pakaian, nPakaian, KeyInt))
 							fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 						} else {
