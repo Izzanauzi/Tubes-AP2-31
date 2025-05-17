@@ -96,9 +96,7 @@ func Table() {
 	fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 }
 
-// MenuTabPakaian menampulkan daftar pakaian (jika ada)
 func MenuTabPakaian(Pakaian TabPakaian, n int) {
-	//Tampilan Menu Daftar Pakaian
 	fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 	fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Daftar Pakaian", " ")
 	if n == -1 { //Jika array blm diisi, maka akan mengeluarkan informasi bahwa data kosong
@@ -108,16 +106,16 @@ func MenuTabPakaian(Pakaian TabPakaian, n int) {
 		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 	} else { //Jika array sudah diisi, maka akan menulis semua data array
 		Table()
-		for i := 0; i <= n; i++ { //Looping untuk menulis semua data array
-			WriteData(Pakaian, i) // Menampilkan data pakaian ke i
+		for i := 0; i <= n; i++ {
+			WriteData(Pakaian, i)
 		}
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
 }
 
-func Arlert(Tipe string) { //tampilan jika memasukan data yang tidak ada
+func Arlert(Tipe string) {
 	switch Tipe {
-	case "ErrorInput":
+	case "ErrorInput": //Tampilan salah membrikan masukan
 		fmt.Printf("\n ______   _____    _____     ____    _____  ")
 		fmt.Printf("\n|  ____| |  __ \\  |  __ \\   / __ \\  |  __ \\ ")
 		fmt.Printf("\n| |__    | |__) | | |__) | | |  | | | |__) |")
@@ -125,20 +123,20 @@ func Arlert(Tipe string) { //tampilan jika memasukan data yang tidak ada
 		fmt.Printf("\n| |____  | | \\ \\  | | \\ \\  | |__| | | | \\ \\ ")
 		fmt.Printf("\n|______| |_|  \\_\\ |_|  \\_\\  \\____/  |_|  \\_\\")
 		fmt.Printf("\n%-9s%s", " ", "Masukan Input Yang Sesuai!")
-	case "DataTidakAda1":
+	case "DataTidakAda1": //Tampilan data tidak ditemukan
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-10s%-30s |", " ", "Data Tidak Ditemukan")
 		fmt.Printf("\n+------------------------------------------+")
-	case "DataTidakAda2":
+	case "DataTidakAda2": //Tampilan data tidak ditemukan
 		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 		fmt.Printf("\n| %-40s%-60s |", " ", "Data Tidak Ditemukan")
 		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 	}
 }
 
-func AturanInput(Tipe string) { // tampilan menu untuk menambahkan data
+func AturanInput(Tipe string) {
 	switch Tipe {
-	case "Nama": //tampilan menu Nama saat akan menambah data
+	case "Nama": //tampilan menu Nama saat akan memasukan data
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-14s%-26s |", " ", "NAMA PAKAIAN")
 		fmt.Printf("\n+------------------------------------------+")
@@ -146,14 +144,14 @@ func AturanInput(Tipe string) { // tampilan menu untuk menambahkan data
 		fmt.Printf("\n| %-40s |", "#2 Gunakan \"_\" sebagai pengganti spasi")
 		fmt.Printf("\n| %-40s |", "EX. Kemeja_Teknik")
 		fmt.Printf("\n+------------------------------------------+")
-	case "Warna": //tampilan menu warna saat akan menambah data
+	case "Warna": //tampilan menu warna saat akan memasukan data
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-13s%-27s |", " ", "WARNA PAKAIAN")
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-40s |", "#1 Masukan Warna Pakaian")
 		fmt.Printf("\n| %-40s |", "EX. Merah")
 		fmt.Printf("\n+------------------------------------------+")
-	case "Kategori": //tampilan menu kategori saat akan menambah data
+	case "Kategori": //tampilan menu kategori saat akan memasukan data
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-12s%-28s |", " ", "KATEGORI PAKAIAN")
 		fmt.Printf("\n+------------------------------------------+")
@@ -172,7 +170,7 @@ func AturanInput(Tipe string) { // tampilan menu untuk menambahkan data
 		fmt.Printf("\n| %-40s |", "09 : Sandal")
 		fmt.Printf("\n| %-40s |", "10 : Sepatu")
 		fmt.Printf("\n+------------------------------------------+")
-	case "Formalitas": //tampilan menu formalitas saat akan menambah data
+	case "Formalitas": //tampilan menu formalitas saat akan memasukan data
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-11s%-29s |", " ", "TINGKAT FORMALITAS")
 		fmt.Printf("\n+------------------------------------------+")
@@ -187,7 +185,6 @@ func AturanInput(Tipe string) { // tampilan menu untuk menambahkan data
 	}
 }
 
-// WriteData menampilkan satu baris data pakaian jika statusnya aktif
 func WriteData(Pakaian TabPakaian, i int) {
 	/*
 		Initial State	: Terdefinisi tipe data buatan TabPakaian Pakaian yang berisi array data pakaian, dan integer i yang merupakan indeks array yang akan diakses
@@ -196,12 +193,10 @@ func WriteData(Pakaian TabPakaian, i int) {
 			2. Menampilkan informasi pakaian (ID, Nama, Warna, Kategori, dan Formalitas) sesuai format tabel
 		Final State		: Jika data aktif, informasi pakaian pada indeks ke-i telah ditampilkan ke layar dalam format tabel
 	*/
-	if Pakaian[i].Aktif { // buat cek data aktif atau kagak
-		fmt.Printf("\n| %-6d ", Pakaian[i].Id)   // Tampilkan ID
-		fmt.Printf("| %-30s ", Pakaian[i].Nama)  // Tampilkan Nama
-		fmt.Printf("| %-15s ", Pakaian[i].Warna) // Tampilkan Warna
-
-		// Menampilkan kategori berdasarkan kode angka
+	if Pakaian[i].Aktif {
+		fmt.Printf("\n| %-6d ", Pakaian[i].Id)
+		fmt.Printf("| %-30s ", Pakaian[i].Nama)
+		fmt.Printf("| %-15s ", Pakaian[i].Warna)
 		switch Pakaian[i].Kategori {
 		case 1:
 			fmt.Printf("| %-25s ", "Kemeja Lengan Panjang")
@@ -224,8 +219,6 @@ func WriteData(Pakaian TabPakaian, i int) {
 		case 10:
 			fmt.Printf("| %-25s ", "Sepatu")
 		}
-
-		// Menampilkan tingkat formalitas berdasarkan kode angka
 		switch Pakaian[i].Formalitas {
 		case 1:
 			fmt.Printf("| %-12s |", "Santai")
@@ -237,7 +230,6 @@ func WriteData(Pakaian TabPakaian, i int) {
 	}
 }
 
-// add menambahkan satu data pakaian baru kedalam array
 func add(Pakaian *TabPakaian, n int) {
 	//Fitur Tambah Pakaian
 	/*
@@ -250,26 +242,20 @@ func add(Pakaian *TabPakaian, n int) {
 	AturanInput("Nama")
 	fmt.Printf("\n| %-10s%-2s ", "Nama", ":")
 	fmt.Scan(&Pakaian[n].Nama)
-
 	AturanInput("Warna")
 	fmt.Printf("\n| %-10s%-2s ", "Warna", ":")
 	fmt.Scan(&Pakaian[n].Warna)
-
 	AturanInput("Kategori")
 	fmt.Printf("\n| %-10s%-2s ", "Kategori", ":")
 	fmt.Scan(&Pakaian[n].Kategori)
-
 	AturanInput("Formalitas")
 	fmt.Printf("\n| %-10s%-2s ", "Formalitas", ":")
 	fmt.Scan(&Pakaian[n].Formalitas)
-
-	// Set ID dan aktifkan data
 	Pakaian[n].Id = NextId + 1
 	Pakaian[n].Aktif = true
 	NextId++ //Update NextID untuk ID berikutnya
 }
 
-// edit memperbarui data pakaian berdasarkan ID
 func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 	//Fitur edit
 	/*
@@ -287,62 +273,49 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 	*/
 
 	var ganti int = BinarySearch(*Pakaian, n, KeyInt) // Cari index data berdasarkan ID
-	var TempEdit, backup DaftarPakaian                // Data sementara serta backup sebelum diubah
-	var konfirmasi bool                               // Untuk menyimpan konfirmasi user
+	var TempEdit, backup DaftarPakaian
+	var konfirmasi bool
 
 	if ganti > -1 && Pakaian[ganti].Aktif {
 		TempEdit.Id = (*Pakaian)[ganti].Id
-		TempEdit.Aktif = true // Set data aktif
-
-		// Tampilkan form edit data
+		TempEdit.Aktif = true
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-15s%-25s |", " ", "EDIT DATA")
 		fmt.Printf("\n| %-15s%-3s%6d%15s |", " ", "ID: ", Pakaian[ganti].Id, " ")
 		fmt.Printf("\n+------------------------------------------+")
-
 		// Edit nama
 		AturanInput("Nama")
 		fmt.Printf("\nData Sebelumnya\t: %s", Pakaian[ganti].Nama)
 		fmt.Printf("\nData Baru\t: ")
 		fmt.Scan(&TempEdit.Nama)
-
 		// Edit warna
 		AturanInput("Warna")
 		fmt.Printf("\nData Sebelumnya\t: %s", Pakaian[ganti].Warna)
 		fmt.Printf("\nData Baru\t: ")
 		fmt.Scan(&TempEdit.Warna)
-
 		// Edit kategori
 		AturanInput("Kategori")
 		fmt.Printf("\nData Sebelumnya\t: %d", Pakaian[ganti].Kategori)
 		fmt.Printf("\nData Baru\t: ")
 		fmt.Scan(&TempEdit.Kategori)
-
 		// Edit formalitas
 		AturanInput("Formalitas")
 		fmt.Printf("\nData Sebelumnya\t: %d", Pakaian[ganti].Formalitas)
 		fmt.Printf("\nData Baru\t: ")
 		fmt.Scan(&TempEdit.Formalitas)
-
 		// Menampilkan perbandingan sebelum dan sesudah
 		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 		fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Perubahan Data", " ")
 		Table()
-		WriteData(*Pakaian, ganti) // data Sebelum
+		WriteData(*Pakaian, ganti)
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
-
-		backup = (*Pakaian)[ganti]   // Simpan data lama
-		(*Pakaian)[ganti] = TempEdit // Ganti dengan data baru
-
-		// Visualisasi perubahan data
+		backup = (*Pakaian)[ganti]
+		(*Pakaian)[ganti] = TempEdit
 		fmt.Printf("\n%-51s%-53s", " ", "||")
 		fmt.Printf("\n%-50s%-54s", " ", "\\||/")
 		fmt.Printf("\n%-51s%-53s", " ", "\\/")
-
 		Table()
-		WriteData(*Pakaian, ganti) // data Sesudah
-
-		// form Konfirmasi akhir
+		WriteData(*Pakaian, ganti)
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-10s%-30s |", " ", "Konfirmasi Perubahan")
