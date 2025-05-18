@@ -523,22 +523,91 @@ func HardDelete(Pakaian *TabPakaian, n int, id int) {
 func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
 	//ganti jadi insertion sort
 	var temp DaftarPakaian
+	var j int
 	for i := 0; i < n; i++ {
-		for j := 0; j < n-i; j++ {
+		temp = (*Pakaian)[i]
+		j = i - 1
 			if Ascending {
-				if (*Pakaian)[j].Nama > (*Pakaian)[j+1].Nama {
-					temp = (*Pakaian)[j]
-					(*Pakaian)[j] = (*Pakaian)[j+1]
-					(*Pakaian)[j+1] = temp
+				for j >= 0 && (*Pakaian)[j].Nama > temp.Nama {
+					(*Pakaian)[j+1] = (*Pakaian)[j]
+					j--
 				}
 			} else {
-				if (*Pakaian)[j].Nama < (*Pakaian)[j+1].Nama {
-					temp = (*Pakaian)[j]
-					(*Pakaian)[j] = (*Pakaian)[j+1]
-					(*Pakaian)[j+1] = temp
+				for j >= 0 && (*Pakaian)[j].Nama < temp.Nama {
+					(*Pakaian)[j+1] = (*Pakaian)[j]
+					j--
 				}
 			}
-		}
+			(*Pakaian)[j+1] = temp
+	}
+	fmt.Println("Data berhasil diurutkan terkecil ke besar")
+}
+
+func SortByWarna(Pakaian *TabPakaian, n int, Ascending bool) {
+	//ganti jadi insertion sort
+	var temp DaftarPakaian
+	var j int
+	for i := 0; i < n; i++ {
+		temp = (*Pakaian)[i]
+		j = i - 1
+			if Ascending {
+				for j >= 0 && (*Pakaian)[j].Warna > temp.Warna {
+					(*Pakaian)[j+1] = (*Pakaian)[j]
+					j--
+				}
+			} else {
+				for j >= 0 && (*Pakaian)[j].Warna < temp.Warna {
+					(*Pakaian)[j+1] = (*Pakaian)[j]
+					j--
+				}
+			}
+			(*Pakaian)[j+1] = temp
+	}
+	fmt.Println("Data berhasil diurutkan terkecil ke besar")
+}
+
+func SortByKategori(Pakaian *TabPakaian, n int, Ascending bool) {
+	//ganti jadi insertion sort
+	var temp DaftarPakaian
+	var j int
+	for i := 0; i < n; i++ {
+		temp = (*Pakaian)[i]
+		j = i - 1
+			if Ascending {
+				for j >= 0 && (*Pakaian)[j].Kategori > temp.Kategori {
+					(*Pakaian)[j+1] = (*Pakaian)[j]
+					j--
+				}
+			} else {
+				for j >= 0 && (*Pakaian)[j].Kategori < temp.Kategori {
+					(*Pakaian)[j+1] = (*Pakaian)[j]
+					j--
+				}
+			}
+			(*Pakaian)[j+1] = temp
+	}
+	fmt.Println("Data berhasil diurutkan terkecil ke besar")
+}
+
+func SortByFormalitas(Pakaian *TabPakaian, n int, Ascending bool) {
+	//ganti jadi insertion sort
+	var temp DaftarPakaian
+	var j int
+	for i := 0; i < n; i++ {
+		temp = (*Pakaian)[i]
+		j = i - 1
+			if Ascending {
+				for j >= 0 && (*Pakaian)[j].Formalitas > temp.Formalitas {
+					(*Pakaian)[j+1] = (*Pakaian)[j]
+					j--
+				}
+			} else {
+				for j >= 0 && (*Pakaian)[j].Formalitas < temp.Formalitas {
+					(*Pakaian)[j+1] = (*Pakaian)[j]
+					j--
+				}
+			}
+			(*Pakaian)[j+1] = temp
 	}
 	fmt.Println("Data berhasil diurutkan terkecil ke besar")
 }
@@ -653,9 +722,9 @@ func main() {
 						fmt.Scan(&pilih)
 						switch pilih {
 						case "1":
-							// SortByNama(&Pakaian, nPakaian, true)
+							SortByWarna(&Pakaian, nPakaian, true)
 						case "2":
-							// SortByNama(&Pakaian, nPakaian, false)
+							SortByWarna(&Pakaian, nPakaian, false)
 						case "0":
 						}
 					case "4":
@@ -663,9 +732,9 @@ func main() {
 						fmt.Scan(&pilih)
 						switch pilih {
 						case "1":
-							// SortByNama(&Pakaian, nPakaian, true)
+							SortByKategori(&Pakaian, nPakaian, true)
 						case "2":
-							// SortByNama(&Pakaian, nPakaian, false)
+							SortByKategori(&Pakaian, nPakaian, false)
 						case "0":
 						}
 					case "5":
@@ -673,9 +742,9 @@ func main() {
 						fmt.Scan(&pilih)
 						switch pilih {
 						case "1":
-							// SortByNama(&Pakaian, nPakaian, true)
+							SortByFormalitas(&Pakaian, nPakaian, true)
 						case "2":
-							// SortByNama(&Pakaian, nPakaian, false)
+							SortByFormalitas(&Pakaian, nPakaian, false)
 						case "0":
 						}
 					case "0":
