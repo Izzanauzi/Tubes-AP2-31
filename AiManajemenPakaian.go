@@ -182,6 +182,29 @@ func AturanInput(Tipe string) {
 		fmt.Printf("\n| %-40s |", "2 : Semi Formal")
 		fmt.Printf("\n| %-40s |", "3 : Formal")
 		fmt.Printf("\n+------------------------------------------+")
+	case "AITujuan": //tampilan menu AI saat akan memasukan data
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-12s%-28s |", " ", "Tujuan")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "#1 Masukan Tujuan Anda Hari Ini")
+		fmt.Printf("\n| %-40s |", "#2 Masukan berupa angka")
+		fmt.Printf("\n| %-40s |", "EX. 2")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "1 : Acara Formal")
+		fmt.Printf("\n| %-40s |", "2 : Week Day")
+		fmt.Printf("\n| %-40s |", "1 : Week End / Holiday")
+		fmt.Printf("\n+------------------------------------------+")
+	case "AIWeather": //tampilan menu AI saat akan memasukan data
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-12s%-28s |", " ", "Cuaca")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "#1 Masukan Cuaca Hari Ini")
+		fmt.Printf("\n| %-40s |", "#2 Masukan berupa angka")
+		fmt.Printf("\n| %-40s |", "EX. 2")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\n| %-40s |", "1 : Panas")
+		fmt.Printf("\n| %-40s |", "2 : Dingin")
+		fmt.Printf("\n+------------------------------------------+")
 	}
 }
 
@@ -235,7 +258,7 @@ func add(Pakaian *TabPakaian, n int) {
 	/*
 		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TabPakaian Pakaian, integer n sebagai indeks untuk data baru yang akan ditambahkan
 		Process			:
-			1. Meminta input dari pengguna untuk mengisi data Nama, Warna, Kategori, dan Formalitas pakaian.
+			1. Meminta input dari pengguna untuk mengisi data Nama, Warna, Kategori, dan Formalitas pakaian
 			2. Menetapkan ID otomatis dari variabel global NextId dan mengaktifkan data
 		Final State		: Data pakaian pada indeks ke-n telah terisi lengkap dan aktif dan variabel global NextId bertambah 1 untuk ID selanjutnya
 	*/
@@ -527,18 +550,18 @@ func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
 	for i := 0; i < n; i++ {
 		temp = (*Pakaian)[i]
 		j = i - 1
-			if Ascending {
-				for j >= 0 && (*Pakaian)[j].Nama > temp.Nama {
-					(*Pakaian)[j+1] = (*Pakaian)[j]
-					j--
-				}
-			} else {
-				for j >= 0 && (*Pakaian)[j].Nama < temp.Nama {
-					(*Pakaian)[j+1] = (*Pakaian)[j]
-					j--
-				}
+		if Ascending {
+			for j >= 0 && (*Pakaian)[j].Nama > temp.Nama {
+				(*Pakaian)[j+1] = (*Pakaian)[j]
+				j--
 			}
-			(*Pakaian)[j+1] = temp
+		} else {
+			for j >= 0 && (*Pakaian)[j].Nama < temp.Nama {
+				(*Pakaian)[j+1] = (*Pakaian)[j]
+				j--
+			}
+		}
+		(*Pakaian)[j+1] = temp
 	}
 	fmt.Println("Data berhasil diurutkan terkecil ke besar")
 }
@@ -550,18 +573,18 @@ func SortByWarna(Pakaian *TabPakaian, n int, Ascending bool) {
 	for i := 0; i < n; i++ {
 		temp = (*Pakaian)[i]
 		j = i - 1
-			if Ascending {
-				for j >= 0 && (*Pakaian)[j].Warna > temp.Warna {
-					(*Pakaian)[j+1] = (*Pakaian)[j]
-					j--
-				}
-			} else {
-				for j >= 0 && (*Pakaian)[j].Warna < temp.Warna {
-					(*Pakaian)[j+1] = (*Pakaian)[j]
-					j--
-				}
+		if Ascending {
+			for j >= 0 && (*Pakaian)[j].Warna > temp.Warna {
+				(*Pakaian)[j+1] = (*Pakaian)[j]
+				j--
 			}
-			(*Pakaian)[j+1] = temp
+		} else {
+			for j >= 0 && (*Pakaian)[j].Warna < temp.Warna {
+				(*Pakaian)[j+1] = (*Pakaian)[j]
+				j--
+			}
+		}
+		(*Pakaian)[j+1] = temp
 	}
 	fmt.Println("Data berhasil diurutkan terkecil ke besar")
 }
@@ -573,18 +596,18 @@ func SortByKategori(Pakaian *TabPakaian, n int, Ascending bool) {
 	for i := 0; i < n; i++ {
 		temp = (*Pakaian)[i]
 		j = i - 1
-			if Ascending {
-				for j >= 0 && (*Pakaian)[j].Kategori > temp.Kategori {
-					(*Pakaian)[j+1] = (*Pakaian)[j]
-					j--
-				}
-			} else {
-				for j >= 0 && (*Pakaian)[j].Kategori < temp.Kategori {
-					(*Pakaian)[j+1] = (*Pakaian)[j]
-					j--
-				}
+		if Ascending {
+			for j >= 0 && (*Pakaian)[j].Kategori > temp.Kategori {
+				(*Pakaian)[j+1] = (*Pakaian)[j]
+				j--
 			}
-			(*Pakaian)[j+1] = temp
+		} else {
+			for j >= 0 && (*Pakaian)[j].Kategori < temp.Kategori {
+				(*Pakaian)[j+1] = (*Pakaian)[j]
+				j--
+			}
+		}
+		(*Pakaian)[j+1] = temp
 	}
 	fmt.Println("Data berhasil diurutkan terkecil ke besar")
 }
@@ -596,27 +619,50 @@ func SortByFormalitas(Pakaian *TabPakaian, n int, Ascending bool) {
 	for i := 0; i < n; i++ {
 		temp = (*Pakaian)[i]
 		j = i - 1
-			if Ascending {
-				for j >= 0 && (*Pakaian)[j].Formalitas > temp.Formalitas {
-					(*Pakaian)[j+1] = (*Pakaian)[j]
-					j--
-				}
-			} else {
-				for j >= 0 && (*Pakaian)[j].Formalitas < temp.Formalitas {
-					(*Pakaian)[j+1] = (*Pakaian)[j]
-					j--
-				}
+		if Ascending {
+			for j >= 0 && (*Pakaian)[j].Formalitas > temp.Formalitas {
+				(*Pakaian)[j+1] = (*Pakaian)[j]
+				j--
 			}
-			(*Pakaian)[j+1] = temp
+		} else {
+			for j >= 0 && (*Pakaian)[j].Formalitas < temp.Formalitas {
+				(*Pakaian)[j+1] = (*Pakaian)[j]
+				j--
+			}
+		}
+		(*Pakaian)[j+1] = temp
 	}
 	fmt.Println("Data berhasil diurutkan terkecil ke besar")
 }
+
+// Fitur AI
+
+func InputPreferensi(Tujuan, Cuaca *int) {
+	/*
+		Initial State	: Terdefinisi pointer integer Tujuan dan Cuaca sebagai input preferensi pengguna
+		Process			:
+			1. Pengguna memasukkan preferensi tujuan dan cuaca sesuai format yang ditentukan
+		Final State		: Preferensi pengguna telah didapatkan untuk digunakan dalam fitur AI
+	*/
+	fmt.Printf("\n+------------------------------------------+")
+	fmt.Printf("\n| %-12s%-28s |", " ", "Masukan Preferensi")
+	fmt.Printf("\n+------------------------------------------+")
+	AturanInput("AITujuan")
+	fmt.Printf("\n| %-10s%-2s ", "Tujuan", ":")
+	fmt.Scan(Tujuan)
+	AturanInput("AIWeather")
+	fmt.Printf("\n| %-10s%-2s ", "Cuaca", ":")
+	fmt.Scan(Cuaca)
+}
+
+// Next Function AI, mengisi data array AI sesuai preferensi pengguna
 
 func main() {
 	var Pakaian TabPakaian      //array utama penyimpan pakaian
 	var nPakaian int = -1       // indeks akhir array
 	var KeyInt int              // input ID atau nilai numerik lainnya
 	var pilih, KeyString string //pilihan menu dan kata kunci pencarian
+	var Tujuan, Cuaca int
 
 	for valid := false; !valid; {
 		Welcome("Start") //menampilkan halaman awal
@@ -758,7 +804,8 @@ func main() {
 					Arlert("ErrorInput")
 				}
 			}
-		// case "2":
+		case "2": //Menu AI
+			InputPreferensi(&Tujuan, &Cuaca)
 		case "0":
 			valid = true // keluar dari program
 		default:
