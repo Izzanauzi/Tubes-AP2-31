@@ -107,7 +107,9 @@ func MenuTabPakaian(Pakaian TabPakaian, n int) {
 	} else { //Jika array sudah diisi, maka akan menulis semua data array
 		Table()
 		for i := 0; i <= n; i++ {
-			WriteData(Pakaian, i)
+			if Pakaian[i].Aktif {
+				WriteData(Pakaian, i)
+			}
 		}
 		fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 	}
@@ -212,44 +214,41 @@ func WriteData(Pakaian TabPakaian, i int) {
 	/*
 		Initial State	: Terdefinisi tipe data buatan TabPakaian Pakaian yang berisi array data pakaian, dan integer i yang merupakan indeks array yang akan diakses
 		Process			:
-			1. Mengecek apakah data pada indeks ke-i aktif
-			2. Menampilkan informasi pakaian (ID, Nama, Warna, Kategori, dan Formalitas) sesuai format tabel
-		Final State		: Jika data aktif, informasi pakaian pada indeks ke-i telah ditampilkan ke layar dalam format tabel
+			1. Menampilkan informasi pakaian (ID, Nama, Warna, Kategori, dan Formalitas) sesuai format tabel
+		Final State		: Informasi pakaian pada indeks ke-i telah ditampilkan ke layar dalam format tabel
 	*/
-	if Pakaian[i].Aktif {
-		fmt.Printf("\n| %-6d ", Pakaian[i].Id)
-		fmt.Printf("| %-30s ", Pakaian[i].Nama)
-		fmt.Printf("| %-15s ", Pakaian[i].Warna)
-		switch Pakaian[i].Kategori {
-		case 1:
-			fmt.Printf("| %-25s ", "Kemeja Lengan Panjang")
-		case 2:
-			fmt.Printf("| %-25s ", "Kemeja Lengan Pendek")
-		case 3:
-			fmt.Printf("| %-25s ", "Kaos Lengan Panjang")
-		case 4:
-			fmt.Printf("| %-25s ", "Kaos Lengan Pendek")
-		case 5:
-			fmt.Printf("| %-25s ", "Celana Panjang")
-		case 6:
-			fmt.Printf("| %-25s ", "Celana Pendek")
-		case 7:
-			fmt.Printf("| %-25s ", "Jaket")
-		case 8:
-			fmt.Printf("| %-25s ", "Luaran")
-		case 9:
-			fmt.Printf("| %-25s ", "Sendal")
-		case 10:
-			fmt.Printf("| %-25s ", "Sepatu")
-		}
-		switch Pakaian[i].Formalitas {
-		case 1:
-			fmt.Printf("| %-12s |", "Santai")
-		case 2:
-			fmt.Printf("| %-12s |", "Semi Formal")
-		case 3:
-			fmt.Printf("| %-12s |", "Formal")
-		}
+	fmt.Printf("\n| %-6d ", Pakaian[i].Id)
+	fmt.Printf("| %-30s ", Pakaian[i].Nama)
+	fmt.Printf("| %-15s ", Pakaian[i].Warna)
+	switch Pakaian[i].Kategori {
+	case 1:
+		fmt.Printf("| %-25s ", "Kemeja Lengan Panjang")
+	case 2:
+		fmt.Printf("| %-25s ", "Kemeja Lengan Pendek")
+	case 3:
+		fmt.Printf("| %-25s ", "Kaos Lengan Panjang")
+	case 4:
+		fmt.Printf("| %-25s ", "Kaos Lengan Pendek")
+	case 5:
+		fmt.Printf("| %-25s ", "Celana Panjang")
+	case 6:
+		fmt.Printf("| %-25s ", "Celana Pendek")
+	case 7:
+		fmt.Printf("| %-25s ", "Jaket")
+	case 8:
+		fmt.Printf("| %-25s ", "Luaran")
+	case 9:
+		fmt.Printf("| %-25s ", "Sendal")
+	case 10:
+		fmt.Printf("| %-25s ", "Sepatu")
+	}
+	switch Pakaian[i].Formalitas {
+	case 1:
+		fmt.Printf("| %-12s |", "Santai")
+	case 2:
+		fmt.Printf("| %-12s |", "Semi Formal")
+	case 3:
+		fmt.Printf("| %-12s |", "Formal")
 	}
 }
 
@@ -393,7 +392,7 @@ func SortById(Pakaian *TabPakaian, n int, Ascending bool) {
 	*/
 	var temp DaftarPakaian
 	var Idx int
-	for i := 0; i <= n; i++ {
+	for i := 0; i < n; i++ {
 		if Ascending {
 			Idx = min(*Pakaian, n, i) // Cari indeks terkecil
 		} else {
@@ -417,6 +416,8 @@ func BinarySearch(Pakaian TabPakaian, n int, KeyInt int) int {
 		if Pakaian[mid].Id == KeyInt {
 			if Pakaian[mid].Aktif {
 				return mid // Ditemukan
+			} else {
+				return -1 // Ditemukan tetapi tidak aktif
 			}
 		} else if Pakaian[mid].Id < KeyInt {
 			left = mid + 1
@@ -440,22 +441,24 @@ func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 		Final State		: Data pakaian yang mengandung KeyString di field yang sesuai telah ditampilkan, atau ditampilkan pesan bahwa data tidak ditemukan
 	*/
 	var found bool
-	for i := 0; i < n; i++ {
+	for i := 0; i <= n; i++ {
 		switch Mode {
 		case "Nama":
 			if Pakaian[i].Nama == KeyString && Pakaian[i].Aktif {
+				if i == 0 {
+					Table()
+				}
+				WriteData(Pakaian, i)
 				found = true
 			}
 		case "Warna":
 			if Pakaian[i].Warna == KeyString && Pakaian[i].Aktif {
+				if i == 0 {
+					Table()
+				}
+				WriteData(Pakaian, i)
 				found = true
 			}
-		}
-		if found {
-			if i == 0 {
-				Table()
-			}
-			WriteData(Pakaian, i)
 		}
 	}
 	if !found {
@@ -478,7 +481,7 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 		Final State		: Data pakaian yang mengandung KeyInt di field yang sesuai telah ditampilkan, atau ditampilkan pesan bahwa data tidak ditemukan
 	*/
 	var found bool
-	for i := 0; i < n; i++ {
+	for i := 0; i <= n; i++ {
 		if i == 0 {
 			fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 			fmt.Printf("\n| %-43s%-57s |", " ", "Hasil Pencarian")
@@ -486,18 +489,20 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 		switch Mode {
 		case "Kategori":
 			if Pakaian[i].Kategori == KeyInt && Pakaian[i].Aktif {
+				if i == 0 {
+					Table()
+				}
+				WriteData(Pakaian, i)
 				found = true
 			}
 		case "Formalitas":
 			if Pakaian[i].Formalitas == KeyInt && Pakaian[i].Aktif {
+				if i == 0 {
+					Table()
+				}
+				WriteData(Pakaian, i)
 				found = true
 			}
-		}
-		if found {
-			if i == 0 {
-				Table()
-			}
-			WriteData(Pakaian, i)
 		}
 	}
 	if !found {
