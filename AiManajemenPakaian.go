@@ -23,6 +23,13 @@ type TabPakaian [nmax]DaftarPakaian
 
 var NextId int //Variabel untuk generate Id Otomatis
 
+type  req struct {
+	id int
+	count int
+}
+
+type AI [nmax]req
+
 func Welcome(tipe string) {
 	switch tipe {
 	case "Start":
@@ -194,7 +201,7 @@ func AturanInput(Tipe string) {
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-40s |", "1 : Acara Formal")
 		fmt.Printf("\n| %-40s |", "2 : Week Day")
-		fmt.Printf("\n| %-40s |", "1 : Week End / Holiday")
+		fmt.Printf("\n| %-40s |", "3 : Week End / Holiday")
 		fmt.Printf("\n+------------------------------------------+")
 	case "AIWeather": //tampilan menu AI saat akan memasukan data
 		fmt.Printf("\n+------------------------------------------+")
@@ -661,6 +668,30 @@ func InputPreferensi(Tujuan, Cuaca *int) {
 }
 
 // Next Function AI, mengisi data array AI sesuai preferensi pengguna
+func inputDataAI(Pakaian TabPakaian, rekomendasi *AI, tujuan, cuaca, n int) {
+	var j, i int
+	var a, b bool
+	if tujuan == 1 {
+		a = Pakaian[i].Formalitas == 3 && Pakaian[i].Kategori != 9 && Pakaian[i].Kategori != 6
+	} else if tujuan == 2 {
+		a = Pakaian[i].Formalitas == 2 || Pakaian[i].Formalitas == 3
+	} else {
+		a = Pakaian[i].Formalitas == 1 || Pakaian[i].Formalitas == 2
+	}
+	if cuaca == 1 {
+		b = Pakaian[i].Kategori != 1 || Pakaian[i].Kategori != 3 || Pakaian[i].Kategori != 7 || Pakaian[i].Kategori != 8
+	} else {
+		b = Pakaian[i].Kategori != 2 || Pakaian[i].Kategori != 4
+	}
+	for i = 0; i <= n; i++ {
+		if a && b {
+			(*rekomendasi)[j].id = Pakaian[i].Id
+			j++
+		}
+	}
+}
+
+	
 
 func main() {
 	var Pakaian TabPakaian      //array utama penyimpan pakaian
@@ -668,6 +699,7 @@ func main() {
 	var KeyInt int              // input ID atau nilai numerik lainnya
 	var pilih, KeyString string //pilihan menu dan kata kunci pencarian
 	var Tujuan, Cuaca int
+	var Rekomendasi AI			//array untuk menyimpan data AI
 
 	for valid := false; !valid; {
 		Welcome("Start") //menampilkan halaman awal
@@ -811,6 +843,7 @@ func main() {
 			}
 		case "2": //Menu AI
 			InputPreferensi(&Tujuan, &Cuaca)
+			inputDataAI(Pakaian, &Rekomendasi, Tujuan, Cuaca, nPakaian)
 		case "0":
 			valid = true // keluar dari program
 		default:
