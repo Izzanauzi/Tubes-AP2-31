@@ -23,8 +23,8 @@ type TabPakaian [nmax]DaftarPakaian
 
 var NextId int //Variabel untuk generate Id Otomatis
 
-type  req struct {
-	id int
+type req struct {
+	id    int
 	count int
 }
 
@@ -90,6 +90,12 @@ func Menu(tipe string) {
 	case "Ascending": //Tampilan menu sorting ascending/descending
 		fmt.Printf("\n| %-40s |", "[1] Ascending")
 		fmt.Printf("\n| %-40s |", "[2] Descending")
+		fmt.Printf("\n| %-40s |", "[0] Back")
+		fmt.Printf("\n+------------------------------------------+")
+		fmt.Printf("\nPilih (1/2/0)?")
+	case "delete": //Tampilan menu delete
+		fmt.Printf("\n| %-40s |", "[1] Soft Delete")
+		fmt.Printf("\n| %-40s |", "[2] Hard Delete")
 		fmt.Printf("\n| %-40s |", "[0] Back")
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\nPilih (1/2/0)?")
@@ -421,11 +427,7 @@ func BinarySearch(Pakaian TabPakaian, n int, KeyInt int) int {
 	for left <= right {
 		mid = (left + right) / 2
 		if Pakaian[mid].Id == KeyInt {
-			if Pakaian[mid].Aktif {
-				return mid // Ditemukan
-			} else {
-				return -1 // Ditemukan tetapi tidak aktif
-			}
+			return mid // Ditemukan
 		} else if Pakaian[mid].Id < KeyInt {
 			left = mid + 1
 		} else {
@@ -544,6 +546,7 @@ func HardDelete(Pakaian *TabPakaian, n int, id int) {
 		Process			:
 		Final State		:
 	*/
+
 	idx := BinarySearch(*Pakaian, n, id)
 	if idx > -1 && !Pakaian[idx].Aktif {
 		for i := idx; i < n; i++ {
@@ -556,7 +559,22 @@ func HardDelete(Pakaian *TabPakaian, n int, id int) {
 }
 
 func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
-	//ganti jadi insertion sort
+	/*
+		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TabPakaian, integer n sebagai jumlah data array, dan boolean Ascending untuk menentukan urutan (true = naik, false = turun)
+		Process			:
+			1. Melakukan iterasi dari indeks 0 hingga n
+			2. Pada setiap iterasi:
+				1. Menyimpan data pada indeks ke-i ke dalam variabel sementara temp
+				2. Menginisialisasi variabel j dengan i - 1
+				3. Jika Ascending, lakukan perbandingan nama pakaian dari indeks j hingga 0
+					- Jika nama pakaian pada indeks j lebih besar dari nama pakaian pada temp, geser data ke kanan
+					- Jika tidak, keluar dari loop
+				4. Jika Descending, lakukan perbandingan nama pakaian dari indeks j hingga 0
+					- Jika nama pakaian pada indeks j lebih kecil dari nama pakaian pada temp, geser data ke kanan
+					- Jika tidak, keluar dari loop
+			5. Setelah loop selesai, simpan data temp ke dalam indeks j + 1
+		Final State		: Data pakaian dalam array telah terurut berdasarkan nama sesuai urutan yang diinginkan (naik atau turun)
+	*/
 	var temp DaftarPakaian
 	var j int
 	for i := 0; i < n; i++ {
@@ -579,7 +597,22 @@ func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
 }
 
 func SortByWarna(Pakaian *TabPakaian, n int, Ascending bool) {
-	//ganti jadi insertion sort
+	/*
+		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TabPakaian, integer n sebagai jumlah data array, dan boolean Ascending untuk menentukan urutan (true = naik, false = turun)
+		Process			:
+			1. Melakukan iterasi dari indeks 0 hingga n
+			2. Pada setiap iterasi:
+				1. Menyimpan data pada indeks ke-i ke dalam variabel sementara temp
+				2. Menginisialisasi variabel j dengan i - 1
+				3. Jika Ascending, lakukan perbandingan warna pakaian dari indeks j hingga 0
+					- Jika warna pakaian pada indeks j lebih besar dari warna pakaian pada temp, geser data ke kanan
+					- Jika tidak, keluar dari loop
+				4. Jika Descending, lakukan perbandingan warna pakaian dari indeks j hingga 0
+					- Jika warna pakaian pada indeks j lebih kecil dari warna pakaian pada temp, geser data ke kanan
+					- Jika tidak, keluar dari loop
+			5. Setelah loop selesai, simpan data temp ke dalam indeks j + 1
+		Final State		: Data pakaian dalam array telah terurut berdasarkan warna sesuai urutan yang diinginkan (naik atau turun)
+	*/
 	var temp DaftarPakaian
 	var j int
 	for i := 0; i < n; i++ {
@@ -602,7 +635,22 @@ func SortByWarna(Pakaian *TabPakaian, n int, Ascending bool) {
 }
 
 func SortByKategori(Pakaian *TabPakaian, n int, Ascending bool) {
-	//ganti jadi insertion sort
+	/*
+		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TabPakaian, integer n sebagai jumlah data array, dan boolean Ascending untuk menentukan urutan (true = naik, false = turun)
+		Process			:
+			1. Melakukan iterasi dari indeks 0 hingga n
+			2. Pada setiap iterasi:
+				1. Menyimpan data pada indeks ke-i ke dalam variabel sementara temp
+				2. Menginisialisasi variabel j dengan i - 1
+				3. Jika Ascending, lakukan perbandingan kategori pakaian dari indeks j hingga 0
+					- Jika kategori pakaian pada indeks j lebih besar dari kategori pakaian pada temp, geser data ke kanan
+					- Jika tidak, keluar dari loop
+				4. Jika Descending, lakukan perbandingan kategori pakaian dari indeks j hingga 0
+					- Jika kategori pakaian pada indeks j lebih kecil dari kategori pakaian pada temp, geser data ke kanan
+					- Jika tidak, keluar dari loop
+			5. Setelah loop selesai, simpan data temp ke dalam indeks j + 1
+		Final State		: Data pakaian dalam array telah terurut berdasarkan kategori sesuai urutan yang diinginkan (naik atau turun)
+	*/
 	var temp DaftarPakaian
 	var j int
 	for i := 0; i < n; i++ {
@@ -625,7 +673,22 @@ func SortByKategori(Pakaian *TabPakaian, n int, Ascending bool) {
 }
 
 func SortByFormalitas(Pakaian *TabPakaian, n int, Ascending bool) {
-	//ganti jadi insertion sort
+	/*
+		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TabPakaian, integer n sebagai jumlah data array, dan boolean Ascending untuk menentukan urutan (true = naik, false = turun)
+		Process			:
+			1. Melakukan iterasi dari indeks 0 hingga n
+			2. Pada setiap iterasi:
+				1. Menyimpan data pada indeks ke-i ke dalam variabel sementara temp
+				2. Menginisialisasi variabel j dengan i - 1
+				3. Jika Ascending, lakukan perbandingan formalitas pakaian dari indeks j hingga 0
+					- Jika formalitas pakaian pada indeks j lebih besar dari formalitas pakaian pada temp, geser data ke kanan
+					- Jika tidak, keluar dari loop
+				4. Jika Descending, lakukan perbandingan formalitas pakaian dari indeks j hingga 0
+					- Jika formalitas pakaian pada indeks j lebih kecil dari formalitas pakaian pada temp, geser data ke kanan
+					- Jika tidak, keluar dari loop
+			5. Setelah loop selesai, simpan data temp ke dalam indeks j + 1
+		Final State		: Data pakaian dalam array telah terurut berdasarkan formalitas sesuai urutan yang diinginkan (naik atau turun)
+	*/
 	var temp DaftarPakaian
 	var j int
 	for i := 0; i < n; i++ {
@@ -669,6 +732,17 @@ func InputPreferensi(Tujuan, Cuaca *int) {
 
 // Next Function AI, mengisi data array AI sesuai preferensi pengguna
 func inputDataAI(Pakaian TabPakaian, rekomendasi *AI, tujuan, cuaca, n int) {
+	/*
+		Initial State	: Terdefinisi array Pakaian bertipe TabPakaian, pointer rekomendasi bertipe AI untuk menyimpan data rekomendasi, integer tujuan dan cuaca sebagai preferensi pengguna, dan integer n sebagai jumlah data pakaian
+		Process			:
+			1. Menginisialisasi variabel j sebagai indeks rekomendasi
+			2. Menginisialisasi variabel a dan b sebagai boolean untuk menyimpan kondisi formalitas dan cuaca
+			3. Menggunakan kondisi if untuk menentukan formalitas berdasarkan tujuan
+			4. Menggunakan kondisi if untuk menentukan cuaca berdasarkan kategori pakaian
+			5. Melakukan iterasi dari indeks 0 hingga n
+			6. Jika kondisi formalitas dan cuaca terpenuhi, simpan data pakaian ke dalam rekomendasi
+		Final State		: Data rekomendasi telah terisi sesuai preferensi pengguna
+	*/
 	var j, i int
 	var a, b bool
 	if tujuan == 1 {
@@ -691,15 +765,13 @@ func inputDataAI(Pakaian TabPakaian, rekomendasi *AI, tujuan, cuaca, n int) {
 	}
 }
 
-	
-
 func main() {
 	var Pakaian TabPakaian      //array utama penyimpan pakaian
 	var nPakaian int = -1       // indeks akhir array
 	var KeyInt int              // input ID atau nilai numerik lainnya
 	var pilih, KeyString string //pilihan menu dan kata kunci pencarian
 	var Tujuan, Cuaca int
-	var Rekomendasi AI			//array untuk menyimpan data AI
+	var Rekomendasi AI //array untuk menyimpan data AI
 
 	for valid := false; !valid; {
 		Welcome("Start") //menampilkan halaman awal
@@ -724,15 +796,26 @@ func main() {
 					SortById(&Pakaian, nPakaian, true) //Melakukan selection sort by Id karena akan menggunakan binary search untuk mencari Id
 					edit(&Pakaian, nPakaian, KeyInt)
 				case "4": //Hapus Pakaian
-					fmt.Printf("Masukan Id data yang ingin di hapus(soft delete): ")
-					fmt.Scan(&KeyInt)
-					SortById(&Pakaian, nPakaian, true)
-					idx := BinarySearch(Pakaian, nPakaian, KeyInt)
-					if idx > -1 && Pakaian[idx].Aktif {
-						Pakaian[idx].Aktif = false
-						fmt.Println("Data berhasil di delete (soft delete)")
-					} else {
-						fmt.Println("Data tidak ditemukan / sudah tidak aktif") // sejauh ini sudah bisa didelete, gua push dulu ada acara gua mya >-<
+					Menu("delete")
+					fmt.Scan(&pilih)
+					switch pilih {
+					case "1": //Hapus Soft
+						fmt.Printf("Masukan Id data yang ingin di hapus(soft delete): ")
+						fmt.Scan(&KeyInt)
+						SortById(&Pakaian, nPakaian, true)
+						SoftDelete(&Pakaian, nPakaian, KeyInt)
+					case "2": //Hapus Permanen
+						Table()
+						for i := 0; i <= nPakaian; i++ {
+							if !Pakaian[i].Aktif {
+								WriteData(Pakaian, i)
+							}
+						}
+						fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
+						fmt.Printf("\nMasukan Id data yang ingin di hapus(permanen): ")
+						fmt.Scan(&KeyInt)
+						SortById(&Pakaian, nPakaian, true)
+						HardDelete(&Pakaian, nPakaian, KeyInt)
 					}
 				case "5": //Cari Pakaian
 					Menu("Search")
