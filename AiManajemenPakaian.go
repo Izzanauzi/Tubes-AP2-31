@@ -14,21 +14,21 @@ type DaftarPakaian struct {
 
 type TabPakaian [nmax]DaftarPakaian
 
-//	type Riwayat struct {
-//		Id   string
-//		Used int
-//	}
-//
-// type TabRiwayat Riwayat
+type Riwayat struct {
+	Id   string
+	Used [5]int
+}
+
+type TabRiwayat Riwayat
 
 var NextId int //Variabel untuk generate Id Otomatis
 
-type req struct {
+type NeedAI struct {
 	id    int
 	count int
 }
 
-type AI [nmax]req
+type TabAI [nmax]NeedAI
 
 func Welcome(tipe string) {
 	switch tipe {
@@ -710,6 +710,33 @@ func SortByFormalitas(Pakaian *TabPakaian, n int, Ascending bool) {
 	fmt.Println("Data berhasil diurutkan terkecil ke besar")
 }
 
+func SortAI(AI *TabAI, n int) {
+	/*
+		Initial State	: Terdefinisi pointer ke array AI bertipe TabAI, integer n sebagai jumlah data array
+		Process			:
+		1. Melakukan iterasi dari indeks 0 hingga n
+		2. Pada setiap iterasi:
+			1. Menyimpan indeks dengan nilai count terbesar ke dalam variabel most
+			2. Melakukan iterasi dari indeks i+1 hingga n
+				- Jika count pada indeks most lebih besar dari count pada indeks j, perbarui most
+			3. Menukar posisi data pada indeks i dengan data pada indeks most menggunakan variabel sementara temp
+		Final State		: Data AI dalam array telah terurut berdasarkan count dari yang terbesar ke terkecil
+	*/
+	var most int
+	var temp NeedAI
+	for i := 0; i < n; i++ {
+		most = i
+		for j := i + 1; j < n; j++ {
+			if (*AI)[most].count > (*AI)[j].count {
+				most = j
+			}
+		}
+		temp = (*AI)[i]
+		(*AI)[i] = (*AI)[most]
+		(*AI)[most] = temp
+	}
+}
+
 // Fitur AI
 
 func InputPreferensi(Tujuan, Cuaca *int) {
@@ -731,35 +758,39 @@ func InputPreferensi(Tujuan, Cuaca *int) {
 }
 
 // Next Function AI, mengisi data array AI sesuai preferensi pengguna
-func inputDataAI(Pakaian TabPakaian, rekomendasi *AI, tujuan, cuaca, n int) {
+func inputDataAI(Pakaian TabPakaian, AI *TabAI, tujuan, cuaca, n, j int) {
 	/*
-		Initial State	: Terdefinisi array Pakaian bertipe TabPakaian, pointer rekomendasi bertipe AI untuk menyimpan data rekomendasi, integer tujuan dan cuaca sebagai preferensi pengguna, dan integer n sebagai jumlah data pakaian
+		Initial State	: Terdefinisi array Pakaian bertipe TabPakaian, pointer AI bertipe TabAI untuk menyimpan data AI, integer tujuan dan cuaca sebagai preferensi pengguna, dan integer n sebagai jumlah data pakaian
 		Process			:
-			1. Menginisialisasi variabel j sebagai indeks rekomendasi
+			1. Menginisialisasi variabel j sebagai indeks AI
 			2. Menginisialisasi variabel a dan b sebagai boolean untuk menyimpan kondisi formalitas dan cuaca
 			3. Menggunakan kondisi if untuk menentukan formalitas berdasarkan tujuan
 			4. Menggunakan kondisi if untuk menentukan cuaca berdasarkan kategori pakaian
 			5. Melakukan iterasi dari indeks 0 hingga n
-			6. Jika kondisi formalitas dan cuaca terpenuhi, simpan data pakaian ke dalam rekomendasi
-		Final State		: Data rekomendasi telah terisi sesuai preferensi pengguna
+			6. Jika kondisi formalitas dan cuaca terpenuhi, simpan data pakaian ke dalam AI
+		Final State		: Data AI telah terisi sesuai preferensi pengguna
 	*/
-	var j, i int
+	var i int
 	var a, b bool
-	if tujuan == 1 {
-		a = Pakaian[i].Formalitas == 3 && Pakaian[i].Kategori != 9 && Pakaian[i].Kategori != 6
-	} else if tujuan == 2 {
-		a = Pakaian[i].Formalitas == 2 || Pakaian[i].Formalitas == 3
-	} else {
-		a = Pakaian[i].Formalitas == 1 || Pakaian[i].Formalitas == 2
-	}
-	if cuaca == 1 {
-		b = Pakaian[i].Kategori != 1 || Pakaian[i].Kategori != 3 || Pakaian[i].Kategori != 7 || Pakaian[i].Kategori != 8
-	} else {
-		b = Pakaian[i].Kategori != 2 || Pakaian[i].Kategori != 4
-	}
+	j = 0
+	fmt.Println(tujuan, cuaca) //debug
 	for i = 0; i <= n; i++ {
-		if a && b {
-			(*rekomendasi)[j].id = Pakaian[i].Id
+		if tujuan == 1 {
+			a = Pakaian[i].Formalitas == 3 && Pakaian[i].Kategori != 9 && Pakaian[i].Kategori != 6
+		} else if tujuan == 2 {
+			a = Pakaian[i].Formalitas == 2 || Pakaian[i].Formalitas == 3
+		} else {
+			a = Pakaian[i].Formalitas == 1 || Pakaian[i].Formalitas == 2
+		}
+		if cuaca == 1 {
+			b = Pakaian[i].Kategori != 1 && Pakaian[i].Kategori != 3 && Pakaian[i].Kategori != 7 && Pakaian[i].Kategori != 8
+		} else {
+			b = Pakaian[i].Kategori != 2 && Pakaian[i].Kategori != 4
+		}
+		if a && b && Pakaian[i].Aktif {
+			(*AI)[j].id = Pakaian[i].Id
+			fmt.Println(AI[j].id) //debug
+			fmt.Println(j)        //debug
 			j++
 		}
 	}
@@ -770,8 +801,8 @@ func main() {
 	var nPakaian int = -1       // indeks akhir array
 	var KeyInt int              // input ID atau nilai numerik lainnya
 	var pilih, KeyString string //pilihan menu dan kata kunci pencarian
-	var Tujuan, Cuaca int
-	var Rekomendasi AI //array untuk menyimpan data AI
+	var Tujuan, Cuaca, j int
+	var AI TabAI //array untuk menyimpan data AI
 
 	for valid := false; !valid; {
 		Welcome("Start") //menampilkan halaman awal
@@ -926,7 +957,17 @@ func main() {
 			}
 		case "2": //Menu AI
 			InputPreferensi(&Tujuan, &Cuaca)
-			inputDataAI(Pakaian, &Rekomendasi, Tujuan, Cuaca, nPakaian)
+			inputDataAI(Pakaian, &AI, Tujuan, Cuaca, nPakaian, j)
+			SortAI(&AI, j) // Mengurutkan data AI berdasarkan Trend
+			Table()
+			for i := 0; i <= nPakaian; i++ {
+				SortById(&Pakaian, nPakaian, true)
+				BinarySearch(Pakaian, nPakaian, AI[i].id)
+				if BinarySearch(Pakaian, nPakaian, AI[i].id) > -1 {
+					WriteData(Pakaian, BinarySearch(Pakaian, nPakaian, AI[i].id))
+				}
+				fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
+			}
 		case "0":
 			valid = true // keluar dari program
 		default:
