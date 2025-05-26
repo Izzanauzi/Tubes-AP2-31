@@ -1,0 +1,39 @@
+/* 
+    Nama Anggota :
+        1. Muhammad Izzan Auzi mulyana Putra (103012400051)
+        2. Ghifar Anshari Rabbani (103012400003)
+
+
+
+    Nomor Topik : 31
+    Judul Topik : Aplikasi AI Stylist dan Manajemen Pakaian Digital
+
+
+
+    Deskripsi Program :
+    Program ini merubakan aplikasi sederhana untuk mengelola data Pakaian dan memberikan rekomendasi pakaian berdasarkan preferensi pengguna, tujuan serta kondisi cuaca, Program ini juga dilengkapi fitur AI sederhana
+
+
+
+    Tantangan yang  dihadapi : 
+        1. Membuat program efisien dengan hanya menggunakan package “fmt”. 
+        2. Membuat UI yang ramah pengguna. 
+        3. Membuat setiap data memiliki sesuatu yang bersifat unik. 
+        4. Membuat sistem dapat memberikan rekomendasi pakaian. 
+
+    Masalah yang dihadapi: Ada beberapa hal yang terbatas karena tidak boleh digunakan, seperti package tambahan, serta masalah eror atau crash yang baru ke detect karena tidak kami sadari sebelumya.
+
+    Fitur Utama :
+        1. Manajemen Pakaian :
+            -Menampilkan daftar data Pakaian
+            -Menambah Data Pakaian
+            -Mengedit Data pakaian 
+            -Menghapus Data Pakaian
+            -Mencari Data Pakaian berdasarkan ID, Nama, Warna, Kategori, Formalitas
+            -Mengsortir Pakaian Berdasarkan ID, Nama, Warna, Kategori, Formalitas
+
+        2. Rekomendasi AI
+            -Penggguna memilih tujuan serta kondisi cuaca
+            -Sistem Akan Memberi saran set pakaian berdasarkan data pengguna
+*/
+
