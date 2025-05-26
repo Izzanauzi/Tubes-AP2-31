@@ -37,31 +37,52 @@ import (
 	"fmt"
 )
 
-const nmax int = 1024 // Maksimun jumlah data pakaian
+const NMAX int = 1024 // Maksimun jumlah data pakaian
 
 type DaftarPakaian struct {
-	Id, Formalitas, Kategori, list int    // Atribut numerik pakaian
-	Nama, Warna                    string // Atribut string pakaian
-	Aktif                          bool   // Flag status untuk data
+	id, formalitas, kategori, list int    // Atribut numerik pakaian
+	nama, warna                    string // Atribut string pakaian
+	aktif                          bool   // Flag status untuk data
 }
 
-type TabPakaian [nmax]DaftarPakaian
+type TabPakaian [NMAX]DaftarPakaian
+
+var listKategori = [11]string{
+	"",
+	"Kemeja Lengan Panjang",
+	"Kemeja Lengan Pendek",
+	"Kaos Lengan Panjang",
+	"Kaos Lengan Pendek",
+	"Celana Panjang",
+	"Celana Pendek",
+	"Jaket",
+	"Luaran",
+	"Sendal",
+	"Sepatu",
+}
+
+var listFormalitas = [4]string{
+	"",
+	"Santai",
+	"Semi Formal",
+	"Formal",
+}
 
 type Riwayat struct {
-	Id   string
-	Used [5]int
+	id   string
+	used [5]int
 }
 
 type TabRiwayat Riwayat
 
-var NextId int //Variabel untuk generate Id Otomatis
+var nextId int //Variabel untuk generate Id Otomatis
 
 type NeedAI struct {
 	id    int
 	count int
 }
 
-type TabAI [nmax]NeedAI
+type TabAI [NMAX]NeedAI
 
 func Welcome(tipe string) {
 	switch tipe {
@@ -153,7 +174,7 @@ func MenuTabPakaian(Pakaian TabPakaian, n int) {
 	} else { //Jika array sudah diisi, maka akan menulis semua data array
 		Table()
 		for i := 0; i <= n; i++ {
-			if Pakaian[i].Aktif {
+			if Pakaian[i].aktif {
 				WriteData(Pakaian, i)
 			}
 		}
@@ -207,16 +228,9 @@ func AturanInput(Tipe string) {
 		fmt.Printf("\n| %-40s |", "#2 Masukan berupa angka")
 		fmt.Printf("\n| %-40s |", "EX. 4")
 		fmt.Printf("\n+------------------------------------------+")
-		fmt.Printf("\n| %-40s |", "01 : Kemeja Lengan Panjang")
-		fmt.Printf("\n| %-40s |", "02 : Kemeja Lengan Pendek")
-		fmt.Printf("\n| %-40s |", "03 : Kaos Lengan Panjang")
-		fmt.Printf("\n| %-40s |", "04 : Kaos Lengan Pendek")
-		fmt.Printf("\n| %-40s |", "05 : Celana Panjang")
-		fmt.Printf("\n| %-40s |", "06 : Celana Pendek")
-		fmt.Printf("\n| %-40s |", "07 : Jaket")
-		fmt.Printf("\n| %-40s |", "08 : Luaran")
-		fmt.Printf("\n| %-40s |", "09 : Sandal")
-		fmt.Printf("\n| %-40s |", "10 : Sepatu")
+		for i := 1; i < 11; i++ {
+			fmt.Printf("\n| %2d%s%-35s |", i, " : ", listKategori[i])
+		}
 		fmt.Printf("\n+------------------------------------------+")
 	case "Formalitas": //tampilan menu formalitas saat akan memasukan data
 		fmt.Printf("\n+------------------------------------------+")
@@ -226,9 +240,9 @@ func AturanInput(Tipe string) {
 		fmt.Printf("\n| %-40s |", "#1 Masukan berupa angka")
 		fmt.Printf("\n| %-40s |", "EX. 2")
 		fmt.Printf("\n+------------------------------------------+")
-		fmt.Printf("\n| %-40s |", "1 : Santai")
-		fmt.Printf("\n| %-40s |", "2 : Semi Formal")
-		fmt.Printf("\n| %-40s |", "3 : Formal")
+		for i := 1; i < 4; i++ {
+			fmt.Printf("\n| %2d%s%-35s |", i, " : ", listFormalitas[i])
+		}
 		fmt.Printf("\n+------------------------------------------+")
 	case "AITujuan": //tampilan menu AI saat akan memasukan data
 		fmt.Printf("\n+------------------------------------------+")
@@ -263,68 +277,40 @@ func WriteData(Pakaian TabPakaian, i int) {
 			1. Menampilkan informasi pakaian (ID, Nama, Warna, Kategori, dan Formalitas) sesuai format tabel
 		Final State		: Informasi pakaian pada indeks ke-i telah ditampilkan ke layar dalam format tabel
 	*/
-	fmt.Printf("\n| %-6d ", Pakaian[i].Id)
-	fmt.Printf("| %-30s ", Pakaian[i].Nama)
-	fmt.Printf("| %-15s ", Pakaian[i].Warna)
-	switch Pakaian[i].Kategori {
-	case 1:
-		fmt.Printf("| %-25s ", "Kemeja Lengan Panjang")
-	case 2:
-		fmt.Printf("| %-25s ", "Kemeja Lengan Pendek")
-	case 3:
-		fmt.Printf("| %-25s ", "Kaos Lengan Panjang")
-	case 4:
-		fmt.Printf("| %-25s ", "Kaos Lengan Pendek")
-	case 5:
-		fmt.Printf("| %-25s ", "Celana Panjang")
-	case 6:
-		fmt.Printf("| %-25s ", "Celana Pendek")
-	case 7:
-		fmt.Printf("| %-25s ", "Jaket")
-	case 8:
-		fmt.Printf("| %-25s ", "Luaran")
-	case 9:
-		fmt.Printf("| %-25s ", "Sendal")
-	case 10:
-		fmt.Printf("| %-25s ", "Sepatu")
-	}
-	switch Pakaian[i].Formalitas {
-	case 1:
-		fmt.Printf("| %-12s |", "Santai")
-	case 2:
-		fmt.Printf("| %-12s |", "Semi Formal")
-	case 3:
-		fmt.Printf("| %-12s |", "Formal")
-	}
+	fmt.Printf("\n| %-6d ", Pakaian[i].id)
+	fmt.Printf("| %-30s ", Pakaian[i].nama)
+	fmt.Printf("| %-15s ", Pakaian[i].warna)
+	fmt.Printf("| %-25s ", listKategori[Pakaian[i].kategori])
+	fmt.Printf("| %-12s |", listFormalitas[Pakaian[i].formalitas])
 }
 
-func add(Pakaian *TabPakaian, n int) {
+func AddData(Pakaian *TabPakaian, n int) {
 	//Fitur Tambah Pakaian
 	/*
 		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TabPakaian Pakaian, integer n sebagai indeks untuk data baru yang akan ditambahkan
 		Process			:
 			1. Meminta input dari pengguna untuk mengisi data Nama, Warna, Kategori, dan Formalitas pakaian
-			2. Menetapkan ID otomatis dari variabel global NextId dan mengaktifkan data
-		Final State		: Data pakaian pada indeks ke-n telah terisi lengkap dan aktif dan variabel global NextId bertambah 1 untuk ID selanjutnya
+			2. Menetapkan ID otomatis dari variabel global nextId dan mengaktifkan data
+		Final State		: Data pakaian pada indeks ke-n telah terisi lengkap dan aktif dan variabel global nextId bertambah 1 untuk ID selanjutnya
 	*/
 	AturanInput("Nama")
 	fmt.Printf("\n| %-10s%-2s ", "Nama", ":")
-	fmt.Scan(&Pakaian[n].Nama)
+	fmt.Scan(&Pakaian[n].nama)
 	AturanInput("Warna")
 	fmt.Printf("\n| %-10s%-2s ", "Warna", ":")
-	fmt.Scan(&Pakaian[n].Warna)
+	fmt.Scan(&Pakaian[n].warna)
 	AturanInput("Kategori")
 	fmt.Printf("\n| %-10s%-2s ", "Kategori", ":")
-	fmt.Scan(&Pakaian[n].Kategori)
+	fmt.Scan(&Pakaian[n].kategori)
 	AturanInput("Formalitas")
 	fmt.Printf("\n| %-10s%-2s ", "Formalitas", ":")
-	fmt.Scan(&Pakaian[n].Formalitas)
-	Pakaian[n].Id = NextId + 1
-	Pakaian[n].Aktif = true
-	NextId++ //Update NextID untuk ID berikutnya
+	fmt.Scan(&Pakaian[n].formalitas)
+	Pakaian[n].id = nextId + 1
+	Pakaian[n].aktif = true
+	nextId++ //Update nextId untuk ID berikutnya
 }
 
-func edit(Pakaian *TabPakaian, n int, KeyInt int) {
+func EditData(Pakaian *TabPakaian, n int, KeyInt int) {
 	//Fitur edit
 	/*
 		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TabPakaian, integer n sebagai jumlah data, dan KeyInt sebagai ID pakaian yang akan diedit
@@ -342,33 +328,33 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 	var ganti int = BinarySearch(*Pakaian, n, KeyInt) // Cari index data berdasarkan ID
 	var TempEdit, backup DaftarPakaian
 	var konfirmasi bool
-	if ganti > -1 && Pakaian[ganti].Aktif {
-		TempEdit.Id = (*Pakaian)[ganti].Id
-		TempEdit.Aktif = true
+	if ganti > -1 && Pakaian[ganti].aktif {
+		TempEdit.id = (*Pakaian)[ganti].id
+		TempEdit.aktif = true
 		fmt.Printf("\n+------------------------------------------+")
 		fmt.Printf("\n| %-15s%-25s |", " ", "EDIT DATA")
-		fmt.Printf("\n| %-15s%-3s%6d%15s |", " ", "ID: ", Pakaian[ganti].Id, " ")
+		fmt.Printf("\n| %-15s%-3s%6d%15s |", " ", "ID: ", Pakaian[ganti].id, " ")
 		fmt.Printf("\n+------------------------------------------+")
 		// Edit nama
 		AturanInput("Nama")
-		fmt.Printf("\nData Sebelumnya\t: %s", Pakaian[ganti].Nama)
+		fmt.Printf("\nData Sebelumnya\t: %s", Pakaian[ganti].nama)
 		fmt.Printf("\nData Baru\t: ")
-		fmt.Scan(&TempEdit.Nama)
+		fmt.Scan(&TempEdit.nama)
 		// Edit warna
 		AturanInput("Warna")
-		fmt.Printf("\nData Sebelumnya\t: %s", Pakaian[ganti].Warna)
+		fmt.Printf("\nData Sebelumnya\t: %s", Pakaian[ganti].warna)
 		fmt.Printf("\nData Baru\t: ")
-		fmt.Scan(&TempEdit.Warna)
+		fmt.Scan(&TempEdit.warna)
 		// Edit kategori
 		AturanInput("Kategori")
-		fmt.Printf("\nData Sebelumnya\t: %d", Pakaian[ganti].Kategori)
+		fmt.Printf("\nData Sebelumnya\t: %d", Pakaian[ganti].kategori)
 		fmt.Printf("\nData Baru\t: ")
-		fmt.Scan(&TempEdit.Kategori)
+		fmt.Scan(&TempEdit.kategori)
 		// Edit formalitas
 		AturanInput("Formalitas")
-		fmt.Printf("\nData Sebelumnya\t: %d", Pakaian[ganti].Formalitas)
+		fmt.Printf("\nData Sebelumnya\t: %d", Pakaian[ganti].formalitas)
 		fmt.Printf("\nData Baru\t: ")
-		fmt.Scan(&TempEdit.Formalitas)
+		fmt.Scan(&TempEdit.formalitas)
 		// Menampilkan perbandingan sebelum dan sesudah
 		fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 		fmt.Printf("\n| %-43s%-14s%-43s |", " ", "Perubahan Data", " ")
@@ -398,33 +384,33 @@ func edit(Pakaian *TabPakaian, n int, KeyInt int) {
 	}
 }
 
-func min(Pakaian TabPakaian, n, i int) int {
+func Min(Pakaian TabPakaian, n, i int) int {
 	/*
 		Mengembalikan nilai minimum dari array Pakaian dari index array integer i sampai jumlah sebanyak integer n
 	*/
 	var min = i
 	for j := i + 1; j <= n; j++ {
-		if Pakaian[min].Id > Pakaian[j].Id {
+		if Pakaian[min].id > Pakaian[j].id {
 			min = j // Perbarui indeks minimum jika ditemukan nilai lebih kecil
 		}
 	}
 	return min // kembalikan indeks minimum
 }
 
-func max(Pakaian TabPakaian, n, i int) int {
+func Max(Pakaian TabPakaian, n, i int) int {
 	/*
 		Mengembalikan nilai maksimum array Pakaian dari index array integer i sampai jumlah sebanyak integer n
 	*/
 	var max = i
 	for j := i + 1; j <= n; j++ {
-		if Pakaian[max].Id < Pakaian[j].Id {
+		if Pakaian[max].id < Pakaian[j].id {
 			max = j // Perbarui indeks maksimum jika ditemukan nilai lebih besar
 		}
 	}
 	return max // Kembalikan indeks maksimum
 }
 
-func SortById(Pakaian *TabPakaian, n int, Ascending bool) {
+func SelectionSortId(Pakaian *TabPakaian, n int, Ascending bool) {
 	/*
 		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TabPakaian, integer n sebagai jumlah data array, dan boolean Ascending untuk menentukan urutan (true = naik, false = turun)
 		Process			:
@@ -440,9 +426,9 @@ func SortById(Pakaian *TabPakaian, n int, Ascending bool) {
 	var Idx int
 	for i := 0; i < n; i++ {
 		if Ascending {
-			Idx = min(*Pakaian, n, i) // Cari indeks terkecil
+			Idx = Min(*Pakaian, n, i) // Cari indeks terkecil
 		} else {
-			Idx = max(*Pakaian, n, i) // Cari indeks terbesar
+			Idx = Max(*Pakaian, n, i) // Cari indeks terbesar
 		}
 		temp = (*Pakaian)[i]            // Simpan sementara
 		(*Pakaian)[i] = (*Pakaian)[Idx] // Tukar posisi
@@ -459,9 +445,9 @@ func BinarySearch(Pakaian TabPakaian, n int, KeyInt int) int {
 	right = n
 	for left <= right {
 		mid = (left + right) / 2
-		if Pakaian[mid].Id == KeyInt {
+		if Pakaian[mid].id == KeyInt {
 			return mid // Ditemukan
-		} else if Pakaian[mid].Id < KeyInt {
+		} else if Pakaian[mid].id < KeyInt {
 			left = mid + 1
 		} else {
 			right = mid - 1
@@ -486,7 +472,7 @@ func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 	for i := 0; i <= n; i++ {
 		switch Mode {
 		case "Nama":
-			if Pakaian[i].Nama == KeyString && Pakaian[i].Aktif {
+			if Pakaian[i].nama == KeyString && Pakaian[i].aktif {
 				if i == 0 {
 					Table()
 				}
@@ -494,7 +480,7 @@ func SquentialSearchString(Pakaian TabPakaian, n int, KeyString, Mode string) {
 				found = true
 			}
 		case "Warna":
-			if Pakaian[i].Warna == KeyString && Pakaian[i].Aktif {
+			if Pakaian[i].warna == KeyString && Pakaian[i].aktif {
 				if i == 0 {
 					Table()
 				}
@@ -530,7 +516,7 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 		}
 		switch Mode {
 		case "Kategori":
-			if Pakaian[i].Kategori == KeyInt && Pakaian[i].Aktif {
+			if Pakaian[i].kategori == KeyInt && Pakaian[i].aktif {
 				if i == 0 {
 					Table()
 				}
@@ -538,7 +524,7 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 				found = true
 			}
 		case "Formalitas":
-			if Pakaian[i].Formalitas == KeyInt && Pakaian[i].Aktif {
+			if Pakaian[i].formalitas == KeyInt && Pakaian[i].aktif {
 				if i == 0 {
 					Table()
 				}
@@ -554,7 +540,7 @@ func SquentialSearcInt(Pakaian TabPakaian, n int, KeyInt int, Mode string) {
 	}
 }
 
-func SoftDelete(Pakaian *TabPakaian, n int, id int) {
+func Delete(Pakaian *TabPakaian, n int, id int) {
 	/*
 		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TanPakaian, integer n sebagai jumlah data array, dan integer id array yang akan di nonaktifkan
 		Process			:
@@ -562,8 +548,8 @@ func SoftDelete(Pakaian *TabPakaian, n int, id int) {
 	*/
 	idx := BinarySearch(*Pakaian, n, id)
 	if idx > -1 {
-		if (*Pakaian)[idx].Aktif {
-			(*Pakaian)[idx].Aktif = false
+		if (*Pakaian)[idx].aktif {
+			(*Pakaian)[idx].aktif = false
 			fmt.Println("Data berhasil di nonaktifkan")
 		} else {
 			fmt.Println("Data sudah tidak aktif")
@@ -573,18 +559,19 @@ func SoftDelete(Pakaian *TabPakaian, n int, id int) {
 	}
 }
 
-func HardDelete(Pakaian *TabPakaian, n int, id int) {
+func DeletePermanent(Pakaian *TabPakaian, n *int, id int) {
 	/*
 		Initial State	: Terdefinisi pointer ke array Pakaian bertipe TanPakaian, integer n sebagai jumlah data array, dan integer id array yang akan di delete permanen
 		Process			:
 		Final State		:
 	*/
 
-	idx := BinarySearch(*Pakaian, n, id)
-	if idx > -1 && !Pakaian[idx].Aktif {
-		for i := idx; i < n; i++ {
+	idx := BinarySearch(*Pakaian, *n, id)
+	if idx > -1 && !Pakaian[idx].aktif {
+		for i := idx; i < *n; i++ {
 			Pakaian[i] = Pakaian[i+1]
 		}
+		*n--
 		fmt.Printf("Data Berhasil di hapus")
 	} else {
 		Arlert("DataTidakAda1")
@@ -614,12 +601,12 @@ func SortByNama(Pakaian *TabPakaian, n int, Ascending bool) {
 		temp = (*Pakaian)[i]
 		j = i - 1
 		if Ascending {
-			for j >= 0 && (*Pakaian)[j].Nama > temp.Nama {
+			for j >= 0 && (*Pakaian)[j].nama > temp.nama {
 				(*Pakaian)[j+1] = (*Pakaian)[j]
 				j--
 			}
 		} else {
-			for j >= 0 && (*Pakaian)[j].Nama < temp.Nama {
+			for j >= 0 && (*Pakaian)[j].nama < temp.nama {
 				(*Pakaian)[j+1] = (*Pakaian)[j]
 				j--
 			}
@@ -652,12 +639,12 @@ func SortByWarna(Pakaian *TabPakaian, n int, Ascending bool) {
 		temp = (*Pakaian)[i]
 		j = i - 1
 		if Ascending {
-			for j >= 0 && (*Pakaian)[j].Warna > temp.Warna {
+			for j >= 0 && (*Pakaian)[j].warna > temp.warna {
 				(*Pakaian)[j+1] = (*Pakaian)[j]
 				j--
 			}
 		} else {
-			for j >= 0 && (*Pakaian)[j].Warna < temp.Warna {
+			for j >= 0 && (*Pakaian)[j].warna < temp.warna {
 				(*Pakaian)[j+1] = (*Pakaian)[j]
 				j--
 			}
@@ -690,12 +677,12 @@ func SortByKategori(Pakaian *TabPakaian, n int, Ascending bool) {
 		temp = (*Pakaian)[i]
 		j = i - 1
 		if Ascending {
-			for j >= 0 && (*Pakaian)[j].Kategori > temp.Kategori {
+			for j >= 0 && (*Pakaian)[j].kategori > temp.kategori {
 				(*Pakaian)[j+1] = (*Pakaian)[j]
 				j--
 			}
 		} else {
-			for j >= 0 && (*Pakaian)[j].Kategori < temp.Kategori {
+			for j >= 0 && (*Pakaian)[j].kategori < temp.kategori {
 				(*Pakaian)[j+1] = (*Pakaian)[j]
 				j--
 			}
@@ -728,12 +715,12 @@ func SortByFormalitas(Pakaian *TabPakaian, n int, Ascending bool) {
 		temp = (*Pakaian)[i]
 		j = i - 1
 		if Ascending {
-			for j >= 0 && (*Pakaian)[j].Formalitas > temp.Formalitas {
+			for j >= 0 && (*Pakaian)[j].formalitas > temp.formalitas {
 				(*Pakaian)[j+1] = (*Pakaian)[j]
 				j--
 			}
 		} else {
-			for j >= 0 && (*Pakaian)[j].Formalitas < temp.Formalitas {
+			for j >= 0 && (*Pakaian)[j].formalitas < temp.formalitas {
 				(*Pakaian)[j+1] = (*Pakaian)[j]
 				j--
 			}
@@ -743,7 +730,7 @@ func SortByFormalitas(Pakaian *TabPakaian, n int, Ascending bool) {
 	fmt.Println("Data berhasil diurutkan terkecil ke besar")
 }
 
-func SortAI(AI *TabAI, n int) {
+func SortDataAI(AI *TabAI, n int) {
 	/*
 		Initial State	: Terdefinisi pointer ke array AI bertipe TabAI, integer n sebagai jumlah data array
 		Process			:
@@ -791,7 +778,7 @@ func InputPreferensi(Tujuan, Cuaca *int) {
 }
 
 // Next Function AI, mengisi data array AI sesuai preferensi pengguna
-func inputDataAI(Pakaian TabPakaian, AI *TabAI, tujuan, cuaca, n, j int) {
+func InputDataAI(Pakaian TabPakaian, AI *TabAI, tujuan, cuaca, n, j int) {
 	/*
 		Initial State	: Terdefinisi array Pakaian bertipe TabPakaian, pointer AI bertipe TabAI untuk menyimpan data AI, integer tujuan dan cuaca sebagai preferensi pengguna, dan integer n sebagai jumlah data pakaian
 		Process			:
@@ -806,24 +793,22 @@ func inputDataAI(Pakaian TabPakaian, AI *TabAI, tujuan, cuaca, n, j int) {
 	var i int
 	var a, b bool
 	j = 0
-	fmt.Println(tujuan, cuaca) //debug
+	fmt.Println(tujuan, cuaca)
 	for i = 0; i <= n; i++ {
 		if tujuan == 1 {
-			a = Pakaian[i].Formalitas == 3 && Pakaian[i].Kategori != 9 && Pakaian[i].Kategori != 6
+			a = Pakaian[i].formalitas == 3 && Pakaian[i].kategori != 9 && Pakaian[i].kategori != 6
 		} else if tujuan == 2 {
-			a = Pakaian[i].Formalitas == 2 || Pakaian[i].Formalitas == 3
+			a = Pakaian[i].formalitas == 2 || Pakaian[i].formalitas == 3
 		} else {
-			a = Pakaian[i].Formalitas == 1 || Pakaian[i].Formalitas == 2
+			a = Pakaian[i].formalitas == 1 || Pakaian[i].formalitas == 2
 		}
 		if cuaca == 1 {
-			b = Pakaian[i].Kategori != 1 && Pakaian[i].Kategori != 3 && Pakaian[i].Kategori != 7 && Pakaian[i].Kategori != 8
+			b = Pakaian[i].kategori != 1 && Pakaian[i].kategori != 3 && Pakaian[i].kategori != 7 && Pakaian[i].kategori != 8
 		} else {
-			b = Pakaian[i].Kategori != 2 && Pakaian[i].Kategori != 4
+			b = Pakaian[i].kategori != 2 && Pakaian[i].kategori != 4
 		}
-		if a && b && Pakaian[i].Aktif {
-			(*AI)[j].id = Pakaian[i].Id
-			fmt.Println(AI[j].id) //debug
-			fmt.Println(j)        //debug
+		if a && b && Pakaian[i].aktif {
+			(*AI)[j].id = Pakaian[i].id
 			j++
 		}
 	}
@@ -853,12 +838,12 @@ func main() {
 					MenuTabPakaian(Pakaian, nPakaian)
 				case "2": //Tambah Pakaian
 					nPakaian++
-					add(&Pakaian, nPakaian)
+					AddData(&Pakaian, nPakaian)
 				case "3": //Edit Pakaian
 					fmt.Printf("Masukan Id data yang ingin di edit: ")
 					fmt.Scan(&KeyInt)
-					SortById(&Pakaian, nPakaian, true) //Melakukan selection sort by Id karena akan menggunakan binary search untuk mencari Id
-					edit(&Pakaian, nPakaian, KeyInt)
+					SelectionSortId(&Pakaian, nPakaian, true) //Melakukan selection sort by Id karena akan menggunakan binary search untuk mencari Id
+					EditData(&Pakaian, nPakaian, KeyInt)
 				case "4": //Hapus Pakaian
 					Menu("delete")
 					fmt.Scan(&pilih)
@@ -866,20 +851,20 @@ func main() {
 					case "1": //Hapus Soft
 						fmt.Printf("Masukan Id data yang ingin di hapus(soft delete): ")
 						fmt.Scan(&KeyInt)
-						SortById(&Pakaian, nPakaian, true)
-						SoftDelete(&Pakaian, nPakaian, KeyInt)
+						SelectionSortId(&Pakaian, nPakaian, true)
+						Delete(&Pakaian, nPakaian, KeyInt)
 					case "2": //Hapus Permanen
 						Table()
 						for i := 0; i <= nPakaian; i++ {
-							if !Pakaian[i].Aktif {
+							if !Pakaian[i].aktif {
 								WriteData(Pakaian, i)
 							}
 						}
 						fmt.Printf("\n+------------------------------------------------------------------------------------------------------+")
 						fmt.Printf("\nMasukan Id data yang ingin di hapus(permanen): ")
 						fmt.Scan(&KeyInt)
-						SortById(&Pakaian, nPakaian, true)
-						HardDelete(&Pakaian, nPakaian, KeyInt)
+						SelectionSortId(&Pakaian, nPakaian, true)
+						DeletePermanent(&Pakaian, &nPakaian, KeyInt)
 					}
 				case "5": //Cari Pakaian
 					Menu("Search")
@@ -888,7 +873,7 @@ func main() {
 					case "1": //Berdasarkan ID
 						fmt.Printf("\nMasukan Kata Kunci\t: ")
 						fmt.Scan(&KeyInt)
-						SortById(&Pakaian, nPakaian, true)
+						SelectionSortId(&Pakaian, nPakaian, true)
 						if BinarySearch(Pakaian, nPakaian, KeyInt) > -1 {
 							Table()
 							WriteData(Pakaian, BinarySearch(Pakaian, nPakaian, KeyInt))
@@ -931,9 +916,9 @@ func main() {
 						fmt.Scan(&pilih)
 						switch pilih {
 						case "1":
-							SortById(&Pakaian, nPakaian, true)
+							SelectionSortId(&Pakaian, nPakaian, true)
 						case "2":
-							SortById(&Pakaian, nPakaian, false)
+							SelectionSortId(&Pakaian, nPakaian, false)
 						case "0":
 						}
 					case "2": // Berdasarkan Nama
@@ -990,17 +975,18 @@ func main() {
 			}
 		case "2": //Menu AI
 			InputPreferensi(&Tujuan, &Cuaca)
-			inputDataAI(Pakaian, &AI, Tujuan, Cuaca, nPakaian, j)
-			SortAI(&AI, j) // Mengurutkan data AI berdasarkan Trend
+			InputDataAI(Pakaian, &AI, Tujuan, Cuaca, nPakaian, j)
+			SortDataAI(&AI, j) // Mengurutkan data AI berdasarkan Trend
+			fmt.Printf("\nRekomendasi Pakaian Berdasarkan Preferensi Anda:\n")
 			Table()
+			SelectionSortId(&Pakaian, nPakaian, true)
 			for i := 0; i <= nPakaian; i++ {
-				SortById(&Pakaian, nPakaian, true)
 				BinarySearch(Pakaian, nPakaian, AI[i].id)
 				if BinarySearch(Pakaian, nPakaian, AI[i].id) > -1 {
 					WriteData(Pakaian, BinarySearch(Pakaian, nPakaian, AI[i].id))
 				}
-				fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 			}
+			fmt.Printf("\n+--------+--------------------------------+-----------------+---------------------------+--------------+")
 		case "0":
 			valid = true // keluar dari program
 		default:
