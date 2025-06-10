@@ -870,13 +870,13 @@ func KombinasiPakaian(Pakaian TabPakaian, AI TabAI, Trend *TabRiwayat, n, j int)
 }
 
 func main() {
-	var pakaian TabPakaian
-	var nPakaian int = -1
-	var keyInt int
-	var pilih, keyString string
-	var tujuan, cuaca, j int
-	var AI TabAI
-	var Trend TabRiwayat
+	var pakaian TabPakaian      // Data Pakaian
+	var nPakaian int = -1       // Jumlah Pakaian
+	var keyInt int              // Input Integer
+	var pilih, keyString string // Input String
+	var tujuan, cuaca, j int    // Preferensi AI, Jumlah data rekomendasi AI
+	var AI TabAI                // Data rekomendasi AI
+	var Trend TabRiwayat        // Data riwayat penggunaan rekomendasi AI
 
 	for valid := false; !valid; {
 		Welcome("Start")
